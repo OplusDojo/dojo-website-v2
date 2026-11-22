@@ -1,0 +1,575 @@
+<!doctype html>
+<html lang="en" data-motion>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>O+Dojo · Complex AI systems, owned until they work</title>
+<meta name="description" content="Former AWS engineers in North America, designing, building and running agentic AI and cloud systems that reach production and stay there.">
+<link rel="icon" href="assets/OPlusDojo-favicon-32px.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@1,6..72,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="scrollcraft.css">
+<link rel="stylesheet" href="site.css">
+<link rel="stylesheet" href="offices.css">
+<style>
+  /* ---------- page-level polish: type ceiling, tracking floor, browser surfaces ---------- */
+  .display { letter-spacing: -0.04em; }
+  .display--xl { font-size: clamp(2.9rem, 1.2rem + 5.4vw, 6rem); }
+  ::selection { background: var(--green); color: #000; }
+  html { accent-color: var(--sc-accent); scrollbar-color: #B8C7B3 transparent; -webkit-tap-highlight-color: rgba(25,231,110,0.25); }
+  a { text-underline-offset: 0.18em; text-decoration-thickness: 1px; }
+  .trust { margin: 0.4rem 0 0; padding-top: 1.4rem; border-top: 1px solid var(--line); max-width: 34rem; color: var(--sc-ink-soft); font-size: 0.95rem; line-height: 1.6; text-wrap: pretty; }
+  .trust b { color: var(--sc-ink); font-weight: 600; }
+
+  /* ---------- phone menu: the section links drop down under the bar ---------- */
+  .nav__menu { display: none; }
+  @media (max-width: 860px) {
+    .nav .btn { height: 38px; padding: 0 0.9rem; }
+    .nav__menu { display: grid; place-content: center; gap: 5px; width: 40px; height: 38px; margin-left: -1.2rem; border: 1px solid var(--line-2); background: transparent; border-radius: 2px; cursor: pointer; }
+    .nav__menu span { display: block; width: 16px; height: 1.5px; background: var(--sc-ink); transition: transform 220ms cubic-bezier(0.23, 1, 0.32, 1); }
+    .nav--open .nav__menu span:first-child { transform: translateY(3.25px) rotate(45deg); }
+    .nav--open .nav__menu span:last-child { transform: translateY(-3.25px) rotate(-45deg); }
+    .nav--open .nav__links { display: grid; position: absolute; top: var(--nav-h); left: 0; right: 0; margin: 0; padding: 0.4rem var(--gut) 1.2rem; gap: 0; background: #fff; border-bottom: 1px solid var(--line); box-shadow: 0 24px 40px -24px rgba(0,0,0,0.18); }
+    .nav--open .nav__links a { padding: 0.95rem 0; border-bottom: 1px solid var(--line); font-size: 1.05rem; color: var(--sc-ink); }
+    .nav--open .nav__links a:last-child { border-bottom: 0; }
+  }
+
+  .btn__ico { font-size: 0.95rem; line-height: 1; transition: transform 160ms var(--sc-ease-out), filter 140ms var(--sc-ease-out); }
+  /* the emoji is drawn dark; lift it to white on the black button, back to its own colour on the green hover */
+  .btn--primary .btn__ico { filter: grayscale(1) brightness(4); }
+  .btn--primary:hover .btn__ico { filter: none; }
+  .btn:hover .btn__ico { transform: rotate(-12deg) scale(1.08); }
+
+  /* ---------- hero ---------- */
+  .hero { display: grid; grid-template-columns: 1fr 1.05fr; gap: clamp(1rem, 3vw, 3rem); align-items: center; }
+  /* desktop: the tile stack is sized to the space above the strip, so the strip lands on the first screen */
+  @media (min-width: 1001px) {
+    .hero__art { height: clamp(24rem, calc(100svh - var(--nav-h) - 14rem), 50rem); }
+    .hero__copy { padding-block: clamp(0.75rem, 2.5vh, 2.5rem); gap: clamp(1.1rem, 2.4vh, 1.8rem); }
+    .hero h1 { font-size: clamp(2.6rem, min(1.2rem + 5.4vw, 7.8vh), 6rem); }
+    .hero .trust { padding-top: clamp(0.9rem, 2vh, 1.4rem); }
+  }
+  /* 18: copy sits on the same horizontal centre line as the tile stack */
+  .hero__copy { padding-block: clamp(2rem, 6vh, 4.5rem) clamp(2.5rem, 6vh, 4rem); display: flex; flex-direction: column; justify-content: center; gap: 1.8rem; }
+  .hero__ctas { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 0.4rem; }
+  .hero h1 { line-height: 1.02; }
+  .hero__art { position: relative; overflow: hidden; background: radial-gradient(circle at 48% 52%, rgba(25,231,110,0.16), transparent 58%); }
+
+  .iso { width: 100%; height: 100%; display: block; overflow: visible; }
+  /* 12: the stack starts level with the headline and its bottom corner stays in view */
+  .hero__art { padding-block: clamp(1rem, 3vh, 2.5rem) clamp(1.5rem, 4vh, 3rem); }
+  .iso .t  { fill: #fff; stroke: #0B5E31; stroke-width: 1.1; stroke-linejoin: round; }
+  .iso .l  { fill: var(--green-100); stroke: #0B5E31; stroke-width: 1.1; stroke-linejoin: round; }
+  .iso .r  { fill: var(--green-50); stroke: #0B5E31; stroke-width: 1.1; stroke-linejoin: round; }
+  .iso .t.hl { fill: var(--green); }
+  .iso .l.hl { fill: #10C35B; }
+  .iso .r.hl { fill: #0CA24B; }
+  .iso .ct { fill: #fff; stroke: #000; stroke-width: 1; }
+  .iso .cl { fill: #000; stroke: #000; stroke-width: 1; }
+  .iso .cr { fill: #1E2A22; stroke: #000; stroke-width: 1; }
+  .iso .deco { stroke: var(--green-300); stroke-width: 1; fill: none; }
+  .iso .deco.strong { stroke: #0B5E31; stroke-width: 1.6; }
+  .iso .deco.dash { stroke: #0B5E31; stroke-dasharray: 5 4; }
+  .iso .deco-fill { fill: rgba(25,231,110,0.18); stroke: #0B5E31; stroke-width: 1; }
+  .iso .deco-solid { fill: var(--green); stroke: #0B5E31; stroke-width: 0.8; }
+  .iso .leader { stroke: var(--line-2); stroke-width: 1; stroke-dasharray: 3 3; }
+  .iso .leader-dot { fill: var(--sc-ink); }
+  .iso .iso-label { font-family: var(--sc-font-mono); font-size: 12px; letter-spacing: 0.08em; fill: var(--sc-ink); }
+  .iso-agents .iso-label { fill: var(--sc-accent); font-weight: 600; }
+
+  /* ---------- scrolling strip: services, then tools ---------- */
+  /* two separate bands: AI models on top, the rest of the stack below, with a thin white gap between */
+  .strip { margin-top: 1.5rem; overflow: hidden; }
+  .strip__band { border-block: 1px solid var(--line); background: var(--green-50); padding-block: clamp(1.25rem, 1.8vw, 1.6rem); }
+  .strip__band + .strip__band { margin-top: 0.85rem; }
+  .mq { display: flex; overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+  .mq__track { display: flex; flex: none; align-items: center; gap: clamp(2.2rem, 4vw, 4rem); padding-right: clamp(2.2rem, 4vw, 4rem); animation: mq var(--mq-duration, 56s) linear infinite; }
+  .mq--rev .mq__track { animation-direction: reverse; animation-duration: 56s; }
+  .mq:hover .mq__track { animation-play-state: paused; }
+  .mq__svc { flex: none; display: flex; align-items: center; gap: clamp(2.2rem, 4vw, 4rem); font-size: clamp(1.3rem, 1rem + 1vw, 2rem); font-weight: 600; letter-spacing: -0.03em; white-space: nowrap; }
+  .mq__svc::after { content: ""; width: 0.5em; height: 0.5em; background: var(--green); flex: none; }
+  .mq__item { display: flex; align-items: center; gap: 0.6rem; flex: none; font-size: 0.95rem; font-weight: 500; color: #1B211C; white-space: nowrap; }
+  .mq__item img { width: 30px; height: 30px; }
+  @keyframes mq { to { transform: translateX(-100%); } }
+  @media (prefers-reduced-motion: reduce) { .mq__track { animation: none; } }
+
+  /* ---------- section heads ---------- */
+  .head { padding-block: clamp(4rem, 9vw, 7.5rem) clamp(2.5rem, 5vw, 4rem); text-align: center; display: grid; justify-items: center; gap: 1.2rem; }
+  .head .lede { text-align: center; }
+
+  /* ---------- services bento ---------- */
+  .bento { display: grid; grid-template-columns: repeat(3, 1fr); }
+  .bento > article { border-top: 1px solid var(--line); border-left: 1px solid var(--line); padding: clamp(1.4rem, 2.6vw, 2.2rem); display: flex; flex-direction: column; gap: 0.8rem; position: relative; min-height: 15rem; background: #fff; transition: background-color 220ms var(--sc-ease-out), transform 260ms cubic-bezier(0.23, 1, 0.32, 1), box-shadow 260ms cubic-bezier(0.23, 1, 0.32, 1); }
+  .bento > article:nth-child(3n+1) { border-left: 0; }
+  /* hover: the card lifts a little off the grid */
+  @media (hover: hover) { .bento > article:hover { background: var(--green-50); transform: translateY(-4px); box-shadow: 0 22px 40px -26px rgba(11, 94, 49, 0.45); z-index: 1; } }
+  .svc-top { display: flex; align-items: center; gap: 0.85rem; margin-bottom: 0.4rem; }
+  .svc-ico { flex: none; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 12px; background: var(--green-50); color: #0B5E31; box-shadow: inset 0 0 0 1px var(--green-300); transition: background-color 220ms var(--sc-ease-out), color 220ms var(--sc-ease-out); }
+  .svc-ico svg { width: 22px; height: 22px; stroke-width: 1.75; }
+  .bento > article:hover .svc-ico { background: var(--green); color: #000; box-shadow: none; }
+  .bento .big { grid-column: span 2; grid-row: span 2; }
+  .bento h3 { font-size: 1.3rem; font-weight: 600; letter-spacing: -0.025em; margin: 0; }
+  .bento p { margin: 0; color: var(--sc-ink-soft); line-height: 1.55; font-size: 0.95rem; max-width: 42ch; }
+
+  /* the live agent trace inside the big cell */
+  /* 20: the trace floats in the middle of the space under the copy, equal gap above and below */
+  .trace { margin-block: auto; border: 1px solid #000; background: #fff; font-family: var(--sc-font-mono); font-size: 0.76rem; }
+  .trace__bar { display: flex; justify-content: space-between; padding: 0.6rem 0.9rem; border-bottom: 1px solid var(--line); background: var(--green-50); color: var(--sc-ink-soft); text-transform: uppercase; letter-spacing: 0.06em; font-size: 0.7rem; }
+  .trace__bar b { color: var(--sc-ink); font-weight: 500; }
+  .trace ol { list-style: none; margin: 0; padding: 0.4rem 0; min-height: 15.5rem; }
+  .trace li { display: grid; grid-template-columns: 4.6rem 7.5rem 1fr auto; gap: 0.8rem; padding: 0.42rem 0.9rem; align-items: baseline; opacity: 0; transform: translateY(6px); transition: opacity 260ms var(--sc-ease-out), transform 260ms var(--sc-ease-out); }
+  .trace li.on { opacity: 1; transform: none; }
+  .trace .ts { color: var(--sc-ink-soft); }
+  .trace .who { color: var(--sc-accent); }
+  .trace .ok { color: #13834F; }
+  .trace .warn { color: #B4540A; }
+  .trace .dur { color: var(--sc-ink-soft); }
+
+  /* ---------- work ---------- */
+  /* equal columns with the divider drawn in the gap, so all three images and stat rows line up */
+  .work { --cg: clamp(2.4rem, 4.4vw, 3.6rem); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: var(--cg); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .case { position: relative; display: flex; flex-direction: column; text-decoration: none; padding-block: clamp(1.2rem, 2.2vw, 1.8rem); }
+  .case + .case::before { content: ""; position: absolute; top: 0; bottom: 0; left: calc(var(--cg) / -2); border-left: 1px solid var(--line); }
+  .case__img { position: relative; aspect-ratio: 4 / 3; overflow: hidden; border-radius: 4px; background: var(--green-50); }
+  .case__img img, .case__img video { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 700ms var(--sc-ease-out); }
+  .case:hover .case__img img, .case:hover .case__img video { transform: scale(1.035); }
+  .case__meta { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; margin-top: 1.2rem; }
+  .case__meta h3 { font-size: 1.6rem; font-weight: 600; letter-spacing: -0.035em; margin: 0; }
+  .case__meta .mono { color: var(--sc-ink-soft); }
+  .case p { margin: 0.5rem 0 0; color: var(--sc-ink-soft); max-width: 48ch; line-height: 1.55; }
+  /* results sit on one baseline across all three cards, three equal slots each */
+  .case__stat { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: auto; padding-top: 1.6rem; }
+  .case__stat > div { border-top: 1px solid var(--line); padding: 1rem 1rem 0 0; }
+  .case__stat > div + div { padding-left: 1rem; border-left: 1px solid var(--line); }
+  .case__stat b { display: block; font-size: clamp(1.4rem, 1rem + 0.9vw, 1.9rem); font-weight: 600; letter-spacing: -0.04em; line-height: 1.05; color: var(--sc-ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .case__stat span { display: block; margin-top: 0.4rem; font-size: 0.8rem; line-height: 1.35; min-height: 2.7em; color: var(--sc-ink-soft); }
+  .case__action { position: absolute; top: calc(clamp(1.2rem, 2.2vw, 1.8rem) + 0.9rem); right: 0.9rem; }
+  .case__go { background: #fff; color: #000; }
+  .case:hover .case__go { background: var(--green); }
+  .case__img--ralhf { background: radial-gradient(ellipse 80% 80% at 70% 60%, #E3DAFF, #B9A5F2 60%, #8C74DC); display: grid; place-items: center; }
+  .case__img--ralhf img { width: 84%; height: auto; border-radius: 6px; box-shadow: 0 30px 60px -30px rgba(40,20,90,0.6); }
+
+  /* ---------- team + figures ---------- */
+  .team { border-top: 1px solid var(--line); }
+  .team__intro { padding-block: clamp(4rem, 9vw, 7rem) clamp(2.5rem, 5vw, 4rem); display: grid; gap: 1.4rem; justify-items: center; text-align: center; }
+  .team__intro h2 { max-width: 22ch; }
+  .team__intro .lede { text-align: center; }
+  .people { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(1rem, 1.6vw, 1.5rem); padding-block: 8px clamp(3rem, 6vw, 5rem); }
+  .person { padding: 2rem clamp(1.1rem, 1.8vw, 1.8rem); border: 1px solid var(--green-100); border-radius: 16px; background: #fff; display: flex; flex-direction: column; align-items: center; text-align: center; text-decoration: none; color: var(--sc-ink); min-width: 0; transition: transform 220ms var(--sc-ease-out), background-color 220ms, border-color 220ms, box-shadow 220ms; }
+  .person__photo, .person__mono { width: clamp(7rem, 10vw, 9rem); height: clamp(7rem, 10vw, 9rem); border-radius: 50%; flex: none; margin: .25rem 0 1.8rem; box-shadow: 0 0 0 5px var(--green-50); }
+  .person__photo { object-fit: cover; object-position: 50% 30%; display: block; }
+  .person__mono { display: grid; place-items: center; background: var(--green-50); color: #0B5E31; font-weight: 600; font-size: 2.2rem; letter-spacing: -0.03em; }
+  .person__body { display: flex; flex-direction: column; align-items: center; flex: 1; width: 100%; }
+  .person h3 { margin: 0; font-size: clamp(1.15rem, 1.55vw, 1.4rem); font-weight: 600; letter-spacing: -0.03em; line-height: 1.2; }
+  .person__role { display: block; margin-top: .65rem; min-height: 2.6em; font-size: .95rem; line-height: 1.3; color: var(--sc-ink); }
+  .person__location { display: block; margin: .15rem 0 1.15rem; font-size: .78rem; color: var(--sc-accent); font-family: var(--sc-font-mono); }
+  .person p { margin: 0; color: var(--sc-ink-soft); font-size: .95rem; line-height: 1.6; text-wrap: pretty; }
+  .person:focus-visible { outline: 2px solid var(--sc-accent); outline-offset: 5px; background: var(--green-50); }
+  @media (hover: hover) and (pointer: fine) {
+    .person:hover { transform: translateY(-6px) scale(1.012); background: var(--green-50); border-color: var(--green); box-shadow: 0 16px 32px -22px rgba(11,94,49,.38); }
+  }
+  @media (max-width: 1050px) { .people { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 600px) {
+    .people { grid-template-columns: 1fr; gap: 1.25rem; }
+    .person { padding: 2rem 1.5rem; }
+    .person__photo, .person__mono { width: 8rem; height: 8rem; }
+    .person h3 { font-size: 1.4rem; }
+    .person__role { min-height: 0; }
+    .person__location { margin-top: .55rem; }
+    .person p { max-width: 34ch; }
+  }
+  @media (prefers-reduced-motion: reduce) { .person { transition: background-color 150ms, border-color 150ms; } .person:hover { transform: none; } }
+  .figs { display: grid; grid-template-columns: repeat(6, 1fr); border-top: 1px solid var(--line); }
+  .figs > div { position: relative; padding: 2rem clamp(1rem, 1.6vw, 1.4rem) 1.8rem; border-left: 1px solid var(--line); }
+  .figs > div::before { content: ""; position: absolute; top: -1px; left: 0; height: 2px; width: var(--fill, 100%); background: var(--green); }
+  .figs > div:first-child::before { left: 0; }
+  .figs > div:first-child { border-left: 0; padding-left: 0; }
+  .figs b { display: block; font-size: clamp(2.2rem, 1.3rem + 2vw, 3.4rem); font-weight: 600; letter-spacing: -0.04em; line-height: 1; font-variant-numeric: tabular-nums; }
+  .figs > div > span { display: block; margin-top: 0.6rem; font-size: 0.8rem; color: var(--sc-ink-soft); line-height: 1.4; }
+
+  /* ---------- voices ---------- */
+  .voices { border-top: 1px solid var(--line); padding-bottom: clamp(3.5rem, 7vw, 6rem); }
+  .voices__viewport { container-type: inline-size; overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 3%, #000 97%, transparent); mask-image: linear-gradient(90deg, transparent, #000 3%, #000 97%, transparent); }
+  .voices__track { --vgap: clamp(1rem, 1.6vw, 1.5rem); display: flex; align-items: stretch; width: max-content; animation: voices var(--v-dur, 70s) linear infinite; }
+  .voices__viewport:hover .voices__track, .voices__viewport:focus-within .voices__track { animation-play-state: paused; }
+  @keyframes voices { to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) {
+    .voices__track { animation: none; width: auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); gap: var(--vgap); }
+    .voices__track .voice { width: auto; margin: 0; } .voices__track .voice[aria-hidden] { display: none; }
+  }
+  .voice { flex: none; width: calc((100cqw - 2 * var(--vgap)) / 3); margin: 0 var(--vgap) 0 0; padding: clamp(1.5rem, 2.2vw, 2rem); display: flex; flex-direction: column; background: #fff; border: 1px solid var(--line); border-radius: 14px; transition: border-color 200ms var(--sc-ease-out), box-shadow 260ms var(--sc-ease-out); }
+  .voice:hover { border-color: var(--green-300); box-shadow: 0 22px 40px -28px rgba(11, 94, 49, 0.4); }
+  .voice__co { display: flex; align-items: center; gap: 0.75rem; }
+  .voice__co img { height: 22px; width: auto; max-width: 92px; }
+  .voice__co a { font-size: 0.92rem; font-weight: 500; color: var(--sc-ink); text-decoration: underline; text-decoration-color: var(--line-2); text-underline-offset: 0.25em; }
+  .voice__co a:hover { text-decoration-color: var(--green); }
+  .voice__area { margin: 1.3rem 0 0; font-size: clamp(1.2rem, 1rem + 0.5vw, 1.45rem); font-weight: 600; letter-spacing: -0.025em; }
+  .voice__tags { list-style: none; display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.9rem 0 0; padding: 0 0 1.3rem; border-bottom: 1px solid var(--line); }
+  .voice__tags li { font-size: 0.74rem; color: #0B5E31; background: var(--green-50); box-shadow: inset 0 0 0 1px var(--green-100); padding: 0.28rem 0.6rem; border-radius: 999px; }
+  .voice blockquote { margin: 1.3rem 0 0; flex: 1; font-size: clamp(0.98rem, 0.92rem + 0.2vw, 1.06rem); line-height: 1.65; font-weight: 400; color: #2A322C; text-wrap: pretty; }
+  .voice figcaption { margin-top: 1.4rem; }
+  .voice figcaption b { display: block; font-weight: 600; font-size: 0.95rem; }
+  .voice figcaption span { font-size: 0.85rem; color: var(--sc-ink-soft); }
+
+  /* ---------- close ---------- */
+  .close { background: var(--green-50); border-top: 1px solid var(--line); position: relative; overflow: hidden; }
+  @media (max-width: 700px) {
+          }
+  .close__inner { padding-block: clamp(3rem, 7vw, 6rem) clamp(4rem, 9vw, 7rem); display: grid; grid-template-columns: 1.3fr 1fr; gap: 1.4rem 2rem; align-items: center; }
+  /* the headline sits on the paragraph's centre line; the button drops to its own row under the paragraph */
+  .close__inner h2 { grid-column: 1; grid-row: 1; margin: 0; }
+  .close__p { grid-column: 2; grid-row: 1; margin: 0; }
+  .close__btn { grid-column: 2; grid-row: 2; justify-self: start; }
+  
+  /* ---------- footer: black ---------- */
+  .foot { background: #000; color: #fff; border-top: 0; --sc-ink-soft: #9AA69D; --line: rgba(255,255,255,0.12); }
+  .foot .chip { color: #9AA69D; } .foot .chip::before, .foot .chip::after { color: var(--green); }
+  .foot__grid > div:first-child { padding-left: 0; }
+  .foot__grid img { filter: brightness(0) invert(1); }
+
+  .foot a { color: #fff; }
+
+  @media (max-width: 1000px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero__art { height: 64svh; }
+    .work { grid-template-columns: 1fr; }
+    .work { border-top: 0; }
+    .case { border-top: 1px solid var(--line); }
+    .case + .case::before { display: none; }
+    .bento { grid-template-columns: 1fr 1fr; }
+    .bento .big { grid-column: 1 / -1; grid-row: auto; }
+    .bento > article { border-left: 1px solid var(--line) !important; }
+    .bento > article:nth-child(2n) { border-left: 0 !important; }
+    .figs { grid-template-columns: repeat(3, 1fr); }
+    .figs > div { border-top: 1px solid var(--line); }
+    .figs > div:nth-child(4) { border-left: 0; }
+  }
+  @media (max-width: 700px) {
+    .bento, .work, .close__inner { grid-template-columns: 1fr; }
+    .voice { width: 84cqw; }
+    .close__inner h2, .close__p, .close__btn { grid-column: 1; grid-row: auto; }
+    .bento > article { border-left: 0 !important; min-height: 0; }
+    .figs { grid-template-columns: 1fr 1fr; }
+    .figs > div { border-left: 1px solid var(--line) !important; }
+    .figs > div:nth-child(odd) { border-left: 0 !important; padding-left: 0; }
+    .trace li { grid-template-columns: 3.6rem 1fr auto; }
+    .trace .who { display: none; }
+    .hero__art { height: auto; padding-block: 0 1.5rem; }
+    .hero__art .iso { height: auto; aspect-ratio: 700 / 640; }
+    .hero__copy { padding-bottom: 1rem; }
+  }
+</style>
+<link rel="stylesheet" href="selected-taste.css">
+<link rel="stylesheet" href="assets/motion/motion.css">
+<link rel="stylesheet" href="motion-refinements.css">
+
+</head>
+<body>
+
+<header class="nav">
+  <div class="frame cell-pad">
+    <a class="nav__mark" href="#top" aria-label="O+Dojo home"><img src="assets/OPlusDojo-logo.final.svg" width="557" height="300" alt="O+Dojo"></a>
+    <nav class="nav__links" id="nav-links" aria-label="Primary">
+      <a href="#work">Work</a>
+      <a href="#services">Services</a>
+      <a href="#approach">Approach</a>
+      <a href="#team">Team</a>
+      <a href="mailto:careers@oplusdojo.com?subject=Careers%20at%20O%2BDojo">Careers</a>
+    </nav>
+    <a class="btn btn--primary" href="mailto:hello@oplusdojo.com?subject=Book%20a%20call">Book a call <span class="btn__ico" aria-hidden="true">📞</span></a>
+    <button class="nav__menu" type="button" aria-controls="nav-links" aria-expanded="false" aria-label="Open menu"><span></span><span></span></button>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- HERO: copy left, exploded system stack right. Five planes separate on scroll. -->
+  <section data-sc-act="flow">
+    <div class="frame hero">
+      <div class="hero__copy cell-pad">
+        <h1 class="display display--xl">AI systems built <span class="mark">for production.</span></h1>
+        <p class="lede">We design, build and run agentic AI and cloud systems. Work directly with senior engineers who have built platforms at AWS.</p>
+        <div class="hero__ctas btn-row">
+          <a class="btn btn--primary" href="mailto:hello@oplusdojo.com?subject=Book%20a%20call">Book a call <span class="btn__ico" aria-hidden="true">📞</span></a>
+          <a class="btn btn--ghost" href="#work">See our work</a>
+        </div>
+        <p class="trust">Engineers from <b>Amazon, Meta, Slack and BlackBerry.</b> <span class="trust__location">Based in Toronto, New York and Dubai.</span></p>
+      </div>
+      <div class="hero__art" aria-hidden="false">
+        {{ISO_STACK}}
+      </div>
+    </div>
+  </section>
+
+  <!-- STRIP: what we do, then what we build with, on a loop -->
+  <section class="strip" aria-label="AI models and tools we build with">
+    <h2 class="sr-only">AI models and tools we build with</h2>
+    <div class="strip__band"><div class="mq">{{MARQUEE_SVC}}</div></div>
+    <div class="strip__band"><div class="mq mq--rev">{{MARQUEE_TECH}}</div></div>
+  </section>
+
+  <!-- SERVICES: a bento of real capabilities, with a live agent trace in the big cell -->
+  <section id="services" aria-labelledby="services-h">
+    <div class="frame hr">
+      <div class="head cell-pad">
+        <span class="chip">Services</span>
+        <h2 id="services-h" class="display display--lg">Production AI, end to end.</h2>
+        <p class="lede">From the first whiteboard to the 3 a.m. page, one senior team designs, builds, secures and runs it.</p>
+      </div>
+      <div class="bento">
+        <article class="big" style="--col:0">
+          <div class="svc-top">{{LUCIDE bot}}<span class="chip">01 · AI development</span></div>
+          <h3>Agents that do real work, inside your systems.</h3>
+          <p>We build secure, scalable AI agents and LLM solutions within AWS architecture, wired into the CRMs, ERPs and documents your teams already use.</p>
+          <div class="trace" data-trace>
+            <div class="trace__bar"><b>Agent trace</b><span>Sample run · illustrative</span></div>
+            <ol>
+              <li><span class="ts">00:00.04</span><span class="who">intake</span><span>New referral received from CRM</span><span class="dur">12ms</span></li>
+              <li><span class="ts">00:00.31</span><span class="who">reasoning</span><span>Matched eligibility rules, 3 documents</span><span class="dur">270ms</span></li>
+              <li><span class="ts">00:00.62</span><span class="who">guardrail</span><span class="ok">PII redacted · policy check passed</span><span class="dur">18ms</span></li>
+              <li><span class="ts">00:01.40</span><span class="who">action</span><span>Draft care plan written to ERP</span><span class="dur">780ms</span></li>
+              <li><span class="ts">00:01.44</span><span class="who">action</span><span class="warn">Needs human review · flagged</span><span class="dur">4ms</span></li>
+              <li><span class="ts">00:01.45</span><span class="who">observe</span><span>Trace stored · alerts nominal</span><span class="dur">1ms</span></li>
+            </ol>
+          </div>
+        </article>
+        <article style="--col:2">
+          <div class="svc-top">{{LUCIDE cloud}}<span class="chip">02 · Cloud</span></div>
+          <h3>Cloud excellence</h3>
+          <p>AWS architecture designed for scale, cost and reliability, from day one.</p>
+        </article>
+        <article style="--col:2">
+          <div class="svc-top">{{LUCIDE shield-check}}<span class="chip">03 · Security</span></div>
+          <h3>Security and compliance</h3>
+          <p>Hands-on DevSecOps and threat modelling. Built to pass the audits your buyers ask about.</p>
+        </article>
+        <article style="--col:0">
+          <div class="svc-top">{{LUCIDE infinity}}<span class="chip">04 · DevOps</span></div>
+          <h3>DevOps and automation</h3>
+          <p>Pipelines, infrastructure as code and release automation, so shipping is routine.</p>
+        </article>
+        <article style="--col:1">
+          <div class="svc-top">{{LUCIDE network}}<span class="chip">05 · Architecture</span></div>
+          <h3>Secure architecture and operations</h3>
+          <p>Systems designed to be run, monitored and supported around the clock.</p>
+        </article>
+        <article style="--col:2">
+          <div class="svc-top">{{LUCIDE handshake}}<span class="chip">06 · Partnership</span></div>
+          <h3>Knowledge transfer, not lock-in</h3>
+          <p>We embed with your team and leave them stronger. You stay in control of what we build.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- APPROACH: the blueprint signature -->
+  <div id="approach"></div>
+  {{BLUEPRINT}}
+
+  <!-- WORK -->
+  <section id="work" aria-labelledby="work-h">
+    <div class="frame">
+      <div class="head cell-pad">
+        <span class="chip">Selected work</span>
+        <h2 id="work-h" class="display display--lg">Shipped, in production, <span class="soft">serving real people.</span></h2>
+      </div>
+      <div class="work">
+        <a class="case card" id="elora" href="work/elora.html">
+          <div class="case__img m-zoom"><img src="assets/elora/hero.jpg" width="3327" height="2350" alt="A care worker with an older patient and his family at home" decoding="async"></div>
+          <span class="case__action" aria-hidden="true"><span class="btn case__go">Read case study</span></span>
+          <div class="case__meta"><h3>Elora</h3><span class="mono">Healthcare · Mobile + web</span></div>
+          <p>A secure, scalable care platform that helps frontline caregivers and social service teams keep patients covered.</p>
+          <!-- data-placeholder = made-up figure for design review. Replace with a real metric before launch. -->
+          <div class="case__stat"><div><b>7+ hrs</b><span>Saved per case</span></div><div><b>2x</b><span>Faster to launch</span></div><div data-placeholder><b>40%</b><span>Fewer missed follow-ups</span></div></div>
+        </a>
+        <a class="case card" id="tenera" href="work/tenera.html">
+          <div class="case__img m-zoom"><img src="assets/tenera/artifact_gathering.jpg" width="1038" height="774" alt="A phone capturing photos and voice notes of a leak in a parking garage for a Tenera report" decoding="async"></div>
+          <span class="case__action" aria-hidden="true"><span class="btn case__go">Read case study</span></span>
+          <div class="case__meta"><h3>Tenera</h3><span class="mono">Property tech · AI platform</span></div>
+          <p>Intelligent automation across the property maintenance lifecycle, now turning site visits into finished engineering reports.</p>
+          <!-- data-placeholder = made-up figure for design review. Replace with a real metric before launch. -->
+          <div class="case__stat"><div><b>20–30</b><span>Page technical reports</span></div><div><b>Minutes</b><span>Not hours, per report</span></div><div data-placeholder><b>5x</b><span>More reports per inspector</span></div></div>
+        </a>
+        <a class="case card" id="ralhf" href="work/ralhf.html">
+          <div class="case__img case__img--ralhf m-zoom"><img src="assets/ralhf/top.jpg" width="2880" height="1800" alt="The RaLHF home page: Are you Contexxt Maxxing?" decoding="async"></div>
+          <span class="case__action" aria-hidden="true"><span class="btn case__go">Read case study</span></span>
+          <div class="case__meta"><h3>RaLHF</h3><span class="mono">Consumer AI · Web + desktop</span></div>
+          <p>A context assistant that collects the history people choose, keeps it fresh, and feeds it to the AI they already use.</p>
+          <!-- data-placeholder = made-up figures for design review. RaLHF has no confirmed results; replace before launch. -->
+          <div class="case__stat"><div data-placeholder><b>10k+</b><span>Context items kept fresh</span></div><div data-placeholder><b>25+</b><span>Apps and file sources</span></div><div data-placeholder><b>60%</b><span>Less re-explaining to AI</span></div></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- TEAM -->
+  <section id="team" aria-labelledby="team-h">
+    <div class="frame">
+      <div class="team">
+        <div class="team__intro cell-pad">
+          <span class="chip">Team</span>
+          <h2 id="team-h" class="display display--md">Built by people who built it at AWS.</h2>
+          <p class="lede">Our leadership and core engineering team are based in the United States and Canada. You work directly with the people who design your system, wherever you are.</p>
+        </div>
+        <div class="people">
+          <!-- Photos: drop <slug>.jpg in assets/team/ and rebuild; until then the card shows initials. -->
+          <!-- Roles match oplusdojo.com (read 2026-11-15). TODO(user): confirm Harry and Abdullah agree to be listed. -->
+          <a class="person" href="https://www.linkedin.com/in/shafaafhossain/" target="_blank" rel="noopener noreferrer">
+            {{PHOTO faik FF Faik Faisal}}
+            <div class="person__body"><h3>Faik Faisal</h3><span class="person__role">Founder &amp; CEO</span><span class="person__location">Toronto</span><p>Former Amazon, Slack and BlackBerry. Led development of Amazon Q Developer at AWS. Enterprise AI infrastructure expertise.</p></div>
+          </a>
+          <a class="person" href="https://www.linkedin.com/in/shafaafhossain/" target="_blank" rel="noopener noreferrer">
+            {{PHOTO harry HM Harry Mower}}
+            <div class="person__body"><h3>Harry Mower</h3><span class="person__role">Advisor</span><span class="person__location">New Jersey</span><p>Former Director and GM of AWS NextGen DevOps Services, with senior roles at Microsoft and Red Hat. 20+ years in developer platforms.</p></div>
+          </a>
+          <a class="person" href="https://www.linkedin.com/in/shafaafhossain/" target="_blank" rel="noopener noreferrer">
+            {{PHOTO abdullah AA Abdullah Ashraf}}
+            <div class="person__body"><h3>Abdullah Ashraf</h3><span class="person__role">Co-founder</span><span class="person__location">Dubai</span><p>Serial entrepreneur across healthcare, digital marketing and trade.</p></div>
+          </a>
+          <a class="person" href="https://www.linkedin.com/in/shafaafhossain/" target="_blank" rel="noopener noreferrer">
+            {{PHOTO shafaaf SH Shafaaf Hossain}}
+            <div class="person__body"><h3>Shafaaf Hossain</h3><span class="person__role">Chief Technology Officer</span><span class="person__location">Toronto</span><p>Engineer at Amazon, Audible and Meta. Shipped serverless and real-time systems at scale. Distributed systems expertise, from MVP to production.</p></div>
+          </a>
+        </div>
+      </div>
+      <!-- Figures count up with scroll position; the markup holds the final values for no-JS and reduced motion. -->
+      <div class="figs">
+        <div><b data-roll="10" data-suffix="+">10+</b><span>Years building enterprise systems</span></div>
+        <div><b data-roll="1000000" data-fmt="users">1M+</b><span>Users served by tools our leaders built</span></div>
+        <div><b data-roll="10" data-suffix="+">10+</b><span>AI projects delivered</span></div>
+        <div><b data-roll="99.9" data-fmt="dec" data-suffix="%">99.9%</b><span>Uptime target</span></div>
+        <div><b data-roll="3" data-suffix="x">3x</b><span>Average client ROI</span></div>
+        <div><b data-roll="100" data-suffix="%">100%</b><span>Client retention</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VOICES: the original three client quotations, with selected interactive styling. -->
+  <!-- TODO(user): Ian Collins's quote is supplied by the user; get his written approval (and confirm CEO or President) before the site goes public. -->
+  <section class="voices" aria-labelledby="voices-h">
+    <div class="frame">
+      <div class="head cell-pad">
+        <h2 id="voices-h" class="display display--lg">What our customers are saying.</h2>
+      </div>
+      <div class="voices__viewport">
+        <div class="voices__track">
+          <figure class="voice">
+            <header class="voice__co"><img src="assets/elora/logo.svg" alt=""><span class="voice__company">EloraHQ</span></header>
+            <h3 class="voice__area">Care coordination</h3>
+            <ul class="voice__tags"><li>AI automation</li><li>Delivery and operations</li><li>Security</li></ul>
+            <blockquote>“OPlus Dojo has truly been a catalyst in turning our momentum into measurable success. We’re on the verge of converting our pilot into a multi-year partnership.”</blockquote>
+            <figcaption><b>Melanie Chen</b><span>CTO and Cofounder, EloraHQ</span></figcaption>
+            <a class="voice__project" href="work/elora.html">Read the Elora case study<span aria-hidden="true">↗</span></a>
+          </figure>
+          <figure class="voice">
+            <header class="voice__co"><img src="assets/tenera-logo.png" alt=""><span class="voice__company">Tenera</span></header>
+            <h3 class="voice__area">Property maintenance</h3>
+            <ul class="voice__tags"><li>Cloud infrastructure</li><li>Delivery and operations</li></ul>
+            <blockquote>“They integrated effortlessly with our in-house team. Thanks to OPlus Dojo, we accelerated our platform development without compromising on performance, security, or reliability.”</blockquote>
+            <figcaption><b>Eugene Solodkin</b><span>CTO, Tenera</span></figcaption>
+            <a class="voice__project" href="work/tenera.html">Read the Tenera case study<span aria-hidden="true">↗</span></a>
+          </figure>
+          <figure class="voice">
+            <header class="voice__co"><img src="assets/ralhf/botfood-wordmark.svg" alt=""><span class="voice__company">Bot Food</span></header>
+            <h3 class="voice__area">Context data layer for RaLHF</h3>
+            <ul class="voice__tags"><li>Data infrastructure</li><li>Privacy and scale</li></ul>
+            <blockquote>“We trusted O+Dojo with the most sensitive part of RaLHF: the layer that stores the context people choose to share. They designed it with privacy and scale in mind from the first day, and it has held up as we have grown.”</blockquote>
+            <figcaption><b>Ian Collins</b><span>CEO, Bot Food</span></figcaption>
+            <a class="voice__project" href="work/ralhf.html">Read the RaLHF case study<span aria-hidden="true">↗</span></a>
+          </figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CLOSE -->
+  <section class="close" aria-labelledby="close-h">
+    <div class="frame">
+      <div class="close__inner cell-pad">
+        <h2 id="close-h" class="display display--lg"><span class="mark">Tell us</span> what has to work.</h2>
+        <p class="lede close__p">Book a call with our engineering leads. We will tell you honestly how we would build it, and what it would take.</p>
+        <a class="btn btn--primary close__btn" href="mailto:hello@oplusdojo.com?subject=Book%20a%20call">Book a call <span class="btn__ico" aria-hidden="true">📞</span></a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot foot--network" id="contact">
+  {{OFFICE_NETWORK}}
+  <div class="frame foot__grid">
+    <div><img src="assets/OPlusDojo-logo.final.svg" width="557" height="300" alt="O+Dojo" style="height:34px;width:auto"><p style="margin-top:1rem">Agentic AI and cloud engineering.<br>Careers: <a href="mailto:careers@oplusdojo.com">careers@oplusdojo.com</a></p></div>
+    <div><span class="chip">North America | US</span><h3>New York</h3><p>251 E 32nd St<br>New York, NY 10016</p></div>
+    <div><span class="chip">North America | Canada</span><h3>Toronto</h3><p>81 Lampton Crescent<br>Markham, ON L6E 1J4</p></div>
+    <div><span class="chip">Middle East</span><h3>Dubai</h3><p>City Tower 2, Sheikh Zayed Rd<br>PO Box 211120</p></div>
+    <div><span class="chip">South Asia</span><h3>Dhaka</h3><p>House 492/4, Road 9 (west)<br>Baridhara DOHS, 1206</p></div>
+  </div>
+  <div class="frame foot__base"><span>© 2026 OPlus Dojo</span><span>Client product imagery shown with reference to their public websites.</span></div>
+</footer>
+
+<script>
+/* Phone menu: toggles the section links; closes on a link tap, Escape, or resize to desktop. */
+(function () {
+  var nav = document.querySelector('.nav'), btn = nav && nav.querySelector('.nav__menu');
+  if (!btn) return;
+  function set(open) {
+    nav.classList.toggle('nav--open', open);
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  }
+  btn.addEventListener('click', function () { set(!nav.classList.contains('nav--open')); });
+  nav.querySelectorAll('.nav__links a').forEach(function (a) { a.addEventListener('click', function () { set(false); }); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && nav.classList.contains('nav--open')) { set(false); btn.focus(); } });
+  matchMedia('(min-width: 861px)').addEventListener('change', function (m) { if (m.matches) set(false); });
+})();
+</script>
+<script src="scrollcraft.js"></script>
+<script src="offices.js" defer></script>
+<script type="module" src="assets/motion/motion.js"></script>
+<script src="motion-refinements.js" defer></script>
+<script>ScrollCraft.mount(document.body);</script>
+<script>
+/* Agent trace: lines arrive in sequence when the cell is on screen, then replay. */
+(function () {
+  var box = document.querySelector('[data-trace]');
+  if (!box) return;
+  var lines = [].slice.call(box.querySelectorAll('li'));
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { lines.forEach(function (l) { l.classList.add('on'); }); return; }
+  var timer = null, i = 0;
+  function step() {
+    if (i < lines.length) { lines[i++].classList.add('on'); timer = setTimeout(step, 520); }
+    else { timer = setTimeout(function () { lines.forEach(function (l) { l.classList.remove('on'); }); i = 0; timer = setTimeout(step, 600); }, 3200); }
+  }
+  new IntersectionObserver(function (es) {
+    es.forEach(function (e) {
+      if (e.isIntersecting && !timer) step();
+      else if (!e.isIntersecting && timer) { clearTimeout(timer); timer = null; }
+    });
+  }, { threshold: 0.3 }).observe(box);
+})();
+</script>
+
+<script>
+// Match travel speed, not cycle time: the two rows have different widths.
+(function () {
+  var top = document.querySelector('.mq:not(.mq--rev)');
+  var bottom = document.querySelector('.mq--rev');
+  if (!top || !bottom) return;
+  var upper = top.querySelector('.mq__track');
+  var lower = bottom.querySelector('.mq__track');
+  function syncSpeed() {
+    var width = lower.getBoundingClientRect().width;
+    if (width > 0) top.style.setProperty('--mq-duration', (56 * upper.getBoundingClientRect().width / width) + 's');
+  }
+  var observer = new ResizeObserver(syncSpeed);
+  observer.observe(upper);
+  observer.observe(lower);
+  document.fonts.ready.then(syncSpeed);
+  syncSpeed();
+})();
+</script>
+<script>
+{{BLUEPRINT_JS}}
+</script>
+</body>
+</html>

@@ -1,0 +1,113 @@
+  <!-- III. THE PEAK: the blueprint drafts itself, then gets signed off. -->
+  <section class="bp" id="blueprint" data-sc-act="pin" data-sc-span="2.8" data-folio="III|Concept to production" data-dark>
+    <div data-sc-stage>
+      <div class="bp__sheet">
+        <svg viewBox="0 0 1200 760" role="img" aria-labelledby="bp-title">
+          <title id="bp-title">Architecture drawing of an agentic AI system: client systems feed an agent orchestrator with intake, reasoning and action agents, connected to a model gateway, vector store and data lake, all inside a secured private network, with observability and 24/7 on-call underneath.</title>
+
+          <!-- Rev A: concept, in pencil -->
+          <g data-ph="a">
+            <path class="pencil" pathLength="1" d="M82 138 L262 141 L259 212 L80 209 Z"/>
+            <path class="pencil" pathLength="1" d="M81 248 L263 251 L260 321 L79 318 Z"/>
+            <path class="pencil" pathLength="1" d="M83 359 L261 362 L262 431 L80 428 Z"/>
+            <path class="pencil" pathLength="1" d="M418 118 L762 122 L759 452 L421 449 Z"/>
+            <path class="pencil" pathLength="1" d="M878 139 L1102 142 L1099 222 L880 219 Z"/>
+            <path class="pencil" pathLength="1" d="M881 269 L1099 271 L1101 352 L879 349 Z"/>
+            <path class="pencil" pathLength="1" d="M879 389 L1101 392 L1098 471 L881 468 Z"/>
+            <path class="pencil" pathLength="1" d="M262 176 C 320 170, 360 182, 420 176"/>
+            <path class="pencil" pathLength="1" d="M262 286 C 320 292, 360 280, 420 286"/>
+            <path class="pencil" pathLength="1" d="M262 396 C 320 390, 360 402, 420 396"/>
+            <path class="pencil" pathLength="1" d="M760 180 C 810 176, 840 186, 880 180"/>
+            <path class="pencil" pathLength="1" d="M760 310 C 810 314, 840 306, 880 310"/>
+            <path class="pencil" pathLength="1" d="M760 430 C 810 426, 840 434, 880 430"/>
+            <text class="pen" x="470" y="104">agents take the repetitive work</text>
+            <text class="pen" x="88" y="122">what they run today</text>
+            <text class="pen" x="884" y="122">models + data</text>
+          </g>
+
+          <!-- Rev B: architecture, inked -->
+          <g data-ph="b">
+            <rect class="fillbox" x="80" y="140" width="180" height="70"/>
+            <rect class="fillbox" x="80" y="250" width="180" height="70"/>
+            <rect class="fillbox" x="80" y="360" width="180" height="70"/>
+            <rect class="ink" pathLength="1" x="80" y="140" width="180" height="70"/>
+            <rect class="ink" pathLength="1" x="80" y="250" width="180" height="70"/>
+            <rect class="ink" pathLength="1" x="80" y="360" width="180" height="70"/>
+            <rect class="ink" pathLength="1" x="420" y="120" width="340" height="330"/>
+            <rect class="ink" pathLength="1" x="450" y="190" width="280" height="60"/>
+            <rect class="ink" pathLength="1" x="450" y="270" width="280" height="60"/>
+            <rect class="ink" pathLength="1" x="450" y="350" width="280" height="60"/>
+            <rect class="ink" pathLength="1" x="880" y="140" width="220" height="80"/>
+            <rect class="ink" pathLength="1" x="880" y="270" width="220" height="80"/>
+            <rect class="ink" pathLength="1" x="880" y="390" width="220" height="80"/>
+            <path class="ink" pathLength="1" d="M260 175 H420"/>
+            <path class="ink" pathLength="1" d="M260 285 H420"/>
+            <path class="ink" pathLength="1" d="M260 395 H420"/>
+            <path class="ink" pathLength="1" d="M760 180 H880"/>
+            <path class="ink" pathLength="1" d="M760 310 H880"/>
+            <path class="ink" pathLength="1" d="M760 430 H880"/>
+            <path class="ink" pathLength="1" d="M590 250 V270 M590 330 V350"/>
+            <text x="98" y="181">CRM</text>
+            <text x="98" y="291">ERP</text>
+            <text x="98" y="401">Documents</text>
+            <text class="sm" x="98" y="198">your systems</text>
+            <text x="438" y="152">AGENT ORCHESTRATOR</text>
+            <text x="468" y="226">Intake agent</text>
+            <text x="468" y="306">Reasoning agent</text>
+            <text x="468" y="386">Action agent</text>
+            <text x="898" y="177">Model gateway</text>
+            <text class="sm" x="898" y="198">Amazon Bedrock</text>
+            <text x="898" y="307">Vector store</text>
+            <text class="sm" x="898" y="328">retrieval</text>
+            <text x="898" y="427">Data lake</text>
+            <text class="sm" x="898" y="448">Amazon S3</text>
+          </g>
+
+          <!-- Rev C: hardened. Security perimeter, policy gates, dimensions -->
+          <g data-ph="c">
+            <rect class="sec" pathLength="1" x="390" y="96" width="740" height="404" stroke-dasharray="0.012 0.008"/>
+            <rect class="sec" pathLength="1" x="383" y="166" width="14" height="18"/>
+            <rect class="sec" pathLength="1" x="383" y="276" width="14" height="18"/>
+            <rect class="sec" pathLength="1" x="383" y="386" width="14" height="18"/>
+            <path class="dim" pathLength="1" d="M390 64 H1130 M390 56 V72 M1130 56 V72"/>
+            <path class="dim" pathLength="1" d="M1158 96 V500 M1150 96 H1166 M1150 500 H1166"/>
+            <path class="dim" pathLength="1" d="M276 230 H322 L397 184"/>
+            <text class="sec-t" x="660" y="56">PRIVATE NETWORK · VPC</text>
+            <text class="sec-t" x="1174" y="300" transform="rotate(90 1174 300)" text-anchor="middle">ENCRYPTED AT REST · KMS</text>
+            <text class="sec-t" x="272" y="224">POLICY GATE · IAM</text>
+            <text class="sec-t" x="408" y="490">THREAT MODELLED · COMPLIANCE REVIEWED</text>
+          </g>
+
+          <!-- Rev D: production. Observability lane, taps, lamps -->
+          <g data-ph="d">
+            <rect class="ink" pathLength="1" x="80" y="580" width="1050" height="64"/>
+            <path class="dim" pathLength="1" d="M170 430 V580 M590 450 V580 M990 470 V580" stroke-dasharray="0.02 0.015"/>
+            <text x="98" y="618">OBSERVABILITY</text>
+            <text class="sm" x="290" y="618">metrics · traces · alerts</text>
+            <text class="sm" x="760" y="618">24/7 on-call · 99.9% uptime target</text>
+            <circle class="lamp-ring" cx="244" cy="156" r="7"/><circle class="lamp" cx="244" cy="156" r="3.5"/>
+            <circle class="lamp-ring" cx="744" cy="136" r="7"/><circle class="lamp" cx="744" cy="136" r="3.5"/>
+            <circle class="lamp-ring" cx="1084" cy="156" r="7"/><circle class="lamp" cx="1084" cy="156" r="3.5"/>
+            <circle class="lamp-ring" cx="1084" cy="286" r="7"/><circle class="lamp" cx="1084" cy="286" r="3.5"/>
+            <circle class="lamp-ring" cx="1084" cy="406" r="7"/><circle class="lamp" cx="1084" cy="406" r="3.5"/>
+            <text class="sec-t" x="80" y="690">ALL SYSTEMS NOMINAL</text>
+          </g>
+        </svg>
+
+        <div class="stamp" aria-hidden="true"><b>Approved</b>for production</div>
+      </div>
+
+      <aside class="bp__block" aria-label="Revision history">
+        <header><b>O+Dojo</b><span>Dwg 001 · Agentic system</span></header>
+        <ol class="bp__rows">
+          <li data-rev="a"><span class="rev">A</span><span class="rev-t">Concept</span><p>We map your process and the decisions an agent should own.</p></li>
+          <li data-rev="b"><span class="rev">B</span><span class="rev-t">Architecture</span><p>Agents, models and data paths, designed inside your cloud account.</p></li>
+          <li data-rev="c"><span class="rev">C</span><span class="rev-t">Hardened</span><p>Threat modelling, access control and compliance before anything ships.</p></li>
+          <li data-rev="d"><span class="rev">D</span><span class="rev-t">Production</span><p>Monitored, supported around the clock, and owned by us.</p></li>
+        </ol>
+        <!-- TODO(user): replace with a named engineering lead once confirmed. -->
+        <div class="bp__sign"><span>Signed off</span><span>O+Dojo Engineering</span></div>
+      </aside>
+    </div>
+  </section>
+

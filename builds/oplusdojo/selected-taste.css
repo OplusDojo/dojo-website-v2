@@ -1,0 +1,73 @@
+/* Selected taste refinements. The original page structure and brand are retained. */
+.hero h1 { font-size: clamp(3rem, 5.1vw, 4.6rem); font-weight: 500; line-height: 1.04; }
+.hero__copy .lede { font-size: 1.2rem; line-height: 1.6; max-width: 44ch; }
+.hero .trust { font-size: .9rem; max-width: 52ch; }
+.trust__location { display: block; margin-top: .35rem; }
+/* Services keeps its original centered positioning; only the type changes. */
+#services .head h2, #work .head h2, .team__intro h2, .voices .head h2 {
+  font-size: clamp(2rem, 3.4vw, 3rem); font-weight: 500; line-height: 1.08;
+}
+/* Centered section introductions share a measured type and spacing system. */
+#work .head, .voices .head {
+  justify-items: center; text-align: center; gap: 16px;
+  padding-block: 96px 48px;
+}
+#work .head h2, .voices .head h2 { max-width: 26ch; }
+.team__intro {
+  display: grid; grid-template-columns: minmax(0, 1fr); align-items: start;
+  justify-items: center; text-align: center; gap: 20px; padding-block: 96px 40px;
+}
+.team__intro > .chip { grid-column: 1 / -1; }
+.team__intro h2 { max-width: 22ch; }
+.team__intro .lede { max-width: 62ch; text-align: center; font-size: 1.05rem; line-height: 1.6; margin: 0; }
+#work .head h2, .team__intro h2, .voices .head h2 { margin: 0; text-wrap: balance; }
+.bp__head {
+  left: var(--gut); right: var(--gut); justify-content: center; align-items: center;
+  flex-direction: column; gap: .65rem; text-align: center;
+}
+.bp__head h2 { max-width: 40ch; text-wrap: balance; font-weight: 500; line-height: 1.15; }
+@media (max-width: 700px) {
+  .bp__head { gap: .4rem; }
+  .bp__head h2 { font-size: 1.15rem; max-width: 30ch; }
+}
+/* Readable, stationary testimonials with useful project links and quiet feedback. */
+.voices__viewport { overflow: visible; mask-image: none; -webkit-mask-image: none; }
+.voices__track { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; width: auto; animation: none; }
+.voice {
+  width: auto; margin: 0; padding: 28px; border-radius: 8px;
+  transition: transform 180ms var(--sc-ease-out), border-color 180ms var(--sc-ease-out), background-color 180ms var(--sc-ease-out), box-shadow 180ms var(--sc-ease-out);
+}
+.voice__co { min-height: 32px; justify-content: space-between; }
+.voice__co img { height: 28px; max-width: 112px; object-fit: contain; }
+.voice__company { font-size: .9rem; font-weight: 500; }
+.voice__area { font-size: 1.2rem; }
+.voice__tags { gap: 8px; }
+.voice__tags li { border-radius: 3px; font-size: .75rem; }
+.voice blockquote { font-size: 1rem; line-height: 1.65; }
+.voice:focus-within { border-color: var(--sc-accent); background: var(--green-50); }
+.voice__project {
+  display: inline-flex; align-items: center; justify-content: space-between; gap: 16px;
+  min-height: 44px; margin-top: 24px; padding-top: 12px; border-top: 1px solid var(--line);
+  color: var(--sc-ink); font-size: .9rem; font-weight: 500; text-decoration: none;
+}
+.voice__project span { transition: transform 180ms var(--sc-ease-out); }
+.voice__project:focus-visible { outline: 2px solid #000; outline-offset: 4px; border-radius: 2px; }
+@media (hover: hover) and (pointer: fine) {
+  .voice:hover { transform: translateY(-2px); border-color: var(--sc-accent); background: var(--green-50); box-shadow: 0 12px 24px -20px rgba(0,0,0,.3); }
+  .voice:hover .voice__project { text-decoration: underline; text-underline-offset: .25em; }
+  .voice:hover .voice__project span, .voice__project:focus-visible span { transform: translate(2px, -2px); }
+}
+@media (max-width: 1100px) { .voices__track { grid-template-columns: 1fr; } }
+@media (max-width: 1000px) { .hero h1 { font-size: clamp(2.3rem, 6vw, 3.5rem); } }
+@media (max-width: 700px) {
+  .hero h1 { font-size: clamp(2rem, 8.3vw, 2.75rem); }
+  .hero__copy .lede { font-size: 1.05rem; }
+  .hero .trust { font-size: .85rem; }
+  #work .head, .team__intro, .voices .head { grid-template-columns: 1fr; padding-block: 64px 32px; gap: 16px; }
+  #services .head h2, #work .head h2, .team__intro h2, .voices .head h2 { font-size: 2rem; }
+  .voice { padding: 24px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .voice, .voice__project span { transition: none; }
+  .voice:hover, .voice:hover .voice__project span, .voice__project:focus-visible span { transform: none; }
+}

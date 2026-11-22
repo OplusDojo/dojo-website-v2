@@ -1,0 +1,49 @@
+/* Motion only: preserve the existing brand, layout and signature scroll scenes. */
+:root {
+  --bg: var(--sc-canvas); --ink: var(--sc-ink); --action: var(--green);
+  --ease: cubic-bezier(.2,.8,.2,1);
+}
+/* Let the taste motion layer own the linked photographs. */
+.case__img img, .case__img video { transition: none; }
+.case:focus-visible { outline: 2px solid var(--sc-accent); outline-offset: 4px; }
+/* Native anchor navigation respects the visitor's motion preference. */
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .case:hover .case__img img, .case:hover .case__img video { transform: none; }
+}
+
+/* Deliberately visible, Codegent-inspired arrival sequence. Native scrolling stays native. */
+@keyframes dojo-arrive {
+  from { opacity: 0; transform: translateY(42px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes dojo-art-arrive {
+  from { opacity: 0; transform: translateY(56px) scale(.94); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .hero h1 { animation: dojo-arrive 1000ms cubic-bezier(.16,1,.3,1) 80ms both; }
+  .hero__copy > .lede { animation: dojo-arrive 1000ms cubic-bezier(.16,1,.3,1) 240ms both; }
+  .hero__ctas { animation: dojo-arrive 1000ms cubic-bezier(.16,1,.3,1) 400ms both; }
+  .hero .trust { animation: dojo-arrive 1000ms cubic-bezier(.16,1,.3,1) 540ms both; }
+  .hero__art { animation: dojo-art-arrive 1400ms cubic-bezier(.16,1,.3,1) 180ms both; }
+}
+
+/* Different entrances, one rhythm. Outer frames contain sideways travel. */
+.bento, .voices { overflow-x: clip; }
+.close__inner h2 { padding-block: .12em; }
+@keyframes dojo-heading-reveal {
+  from { opacity: 1; clip-path: inset(0 0 100% 0); transform: translateY(24px); }
+  to { opacity: 1; clip-path: inset(0 0 0% 0); transform: translateY(0); }
+}
+@keyframes dojo-actions-arrive {
+  from { opacity: 0; transform: translateY(20px) scale(.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .hero h1 { animation-name: dojo-heading-reveal; animation-duration: 1100ms; }
+  .hero__ctas { animation-name: dojo-actions-arrive; }
+}

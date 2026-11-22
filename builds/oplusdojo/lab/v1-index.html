@@ -1,0 +1,705 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>O+Dojo · Complex AI systems, owned until they work</title>
+<meta name="description" content="Former AWS engineers in North America, designing, building and running agentic AI and cloud systems that reach production and stay there.">
+<link rel="icon" href="assets/OPlusDojo-favicon-32px.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..500&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="scrollcraft.css">
+<style>
+  :root {
+    --sc-canvas:     #F1F1EC;
+    --sc-surface:    #E6E7E1;
+    --sc-ink:        #13151A;
+    --sc-ink-soft:   #4A505C;
+    --sc-accent:     #2563EB;
+    --sc-accent-ink: #FFFFFF;
+    --sc-font-display: "Newsreader", Georgia, serif;
+    --sc-font-text:    "Geist", system-ui, sans-serif;
+    --sc-font-mono:    "Geist Mono", ui-monospace, monospace;
+
+    --navy:      #0E1F45;
+    --navy-ink:  #E6ECFA;
+    --navy-soft: #A9B7D8;
+    --sky:       #8DB8FF;
+    --pencil:    #7F92BF;
+    --ink-ground:#13151A;
+    --folio-w:   3.25rem;
+  }
+
+  body { background: var(--sc-canvas); color: var(--sc-ink); }
+  h1, h2, h3 { font-weight: 400; }
+  .sc-display { font-weight: 400; letter-spacing: -0.02em; font-variation-settings: "opsz" 72; }
+  .sc-display em { font-style: italic; }
+  a { color: inherit; }
+
+  /* Running-text call to action. One label, used everywhere: "Book a call". */
+  .book {
+    color: var(--sc-accent);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.22em;
+    transition: text-decoration-thickness 140ms var(--sc-ease-out), color 140ms var(--sc-ease-out);
+    white-space: nowrap;
+  }
+  .book:hover { text-decoration-thickness: 2px; }
+  .book:active { transform: translateY(1px); }
+  .book:focus-visible { outline: 2px solid var(--sc-accent); outline-offset: 4px; border-radius: 2px; }
+
+  .mono { font-family: var(--sc-font-mono); font-size: var(--sc-t-xs); letter-spacing: 0.04em; text-transform: uppercase; }
+
+  /* ---------- folio: the only chrome on the page ---------- */
+  .folio {
+    position: fixed; z-index: 40; inset: 0 auto 0 0; width: var(--folio-w);
+    display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+    padding: 1.4rem 0; pointer-events: none;
+    color: var(--folio-ink, var(--sc-ink-soft));
+    transition: color 200ms var(--sc-ease-out);
+  }
+  .folio a { pointer-events: auto; }
+  .folio__mark { width: 30px; height: auto; display: block; }
+  .folio__text {
+    writing-mode: vertical-rl; transform: rotate(180deg);
+    font-family: var(--sc-font-mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .folio__num { color: var(--folio-accent, var(--sc-accent)); margin-bottom: 0.9em; }
+  body.on-dark { --folio-ink: var(--navy-soft); --folio-accent: var(--sky); }
+
+  main { padding-left: 0; }
+  .wrap { max-width: calc(1320px + var(--folio-w)); margin-inline: auto; padding-inline: calc(var(--folio-w) + var(--sc-gutter)) var(--sc-gutter); }
+  .builders__strip { margin-left: var(--folio-w); }
+
+  /* ---------- title page ---------- */
+  .title {
+    position: relative; min-height: 100svh; overflow: hidden;
+    display: grid; align-items: end;
+    padding-block: clamp(5rem, 12vh, 9rem) clamp(3rem, 9vh, 6rem);
+  }
+  .title__plane { position: absolute; pointer-events: none; }
+  .title__back { inset: -6% -4% -6% 26%; opacity: 0.42; }
+  .title__back svg { width: 100%; height: 100%; }
+  .title__vellum {
+    right: clamp(-8rem, -6vw, -2rem); bottom: clamp(-14rem, -16vh, -4rem);
+    width: clamp(18rem, 30vw, 28rem); aspect-ratio: 0.78;
+    background: rgba(250, 250, 247, 0.72);
+    -webkit-backdrop-filter: blur(1.5px); backdrop-filter: blur(1.5px);
+    box-shadow: 0 30px 60px -28px rgba(19, 21, 26, 0.35), 0 2px 6px rgba(19, 21, 26, 0.08);
+    transform-origin: 0 100%;
+    rotate: -5deg;
+    border: 1px solid rgba(19, 21, 26, 0.08);
+    padding: 1.6rem 1.8rem; color: var(--sc-ink-soft);
+  }
+  .title__vellum svg { width: 100%; height: auto; margin-top: 1rem; }
+  .title__vellum .mono { display: block; line-height: 1.8; }
+  .title__copy { position: relative; z-index: 2; max-width: 62rem; }
+  .title__logo { width: clamp(84px, 9vw, 120px); height: auto; margin-bottom: clamp(2.5rem, 9vh, 6rem); display: block; }
+  .title h1 { font-size: clamp(3rem, 1.4rem + 6.4vw, 7.2rem); line-height: 0.98; margin: 0; max-width: 13ch; text-wrap: balance; }
+  .title__dek { font-size: var(--sc-t-lg); line-height: 1.5; color: var(--sc-ink-soft); max-width: 38ch; margin: 1.8rem 0 0; }
+  .title__byline { margin-top: 2.2rem; display: flex; flex-wrap: wrap; gap: 0.6rem 2rem; align-items: baseline; font-size: var(--sc-t-base); }
+  .title__byline .mono { color: var(--sc-ink-soft); }
+
+  /* ---------- chapter scaffolding ---------- */
+  .chapter { position: relative; padding-block: clamp(5rem, 12vw, 10rem); }
+  .chapter--surface { background: var(--sc-surface); }
+  #builders { padding-top: 0; }
+  .chapter h2 { font-size: var(--sc-t-3xl); line-height: 1.02; margin: 0; max-width: 18ch; text-wrap: balance; }
+  .prose { max-width: var(--sc-measure); }
+  .prose p { margin: 0 0 1.15em; line-height: 1.65; text-wrap: pretty; }
+  .prose p.lede { font-family: var(--sc-font-display); font-size: var(--sc-t-xl); line-height: 1.35; color: var(--sc-ink); margin-bottom: 1.2em; font-variation-settings: "opsz" 36; }
+  .rule { height: 1px; background: rgba(19, 21, 26, 0.16); border: 0; margin: 0; }
+
+  figure { margin: 0; }
+  figcaption { font-family: var(--sc-font-mono); font-size: 0.72rem; letter-spacing: 0.05em; color: var(--sc-ink-soft); margin-top: 0.8rem; text-transform: uppercase; }
+  .ph {
+    /* photograph placeholder until checkpoint 2 */
+    background:
+      repeating-linear-gradient(135deg, rgba(19,21,26,0.05) 0 1px, transparent 1px 12px),
+      #DCDDD6;
+    display: grid; place-items: center; color: var(--sc-ink-soft);
+    font-family: var(--sc-font-mono); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .photo { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  /* I. You first */
+  .first { display: grid; grid-template-columns: repeat(12, 1fr); column-gap: clamp(1rem, 2.4vw, 2.5rem); row-gap: 3rem; }
+  .first__head { grid-column: 1 / span 8; }
+  .first__body { grid-column: 1 / span 6; }
+  .first__fig { grid-column: 8 / span 5; grid-row: 1 / span 2; align-self: end; }
+  .first__frame { aspect-ratio: 4 / 5; overflow: hidden; }
+  .first__fig .photo { height: 114%; margin-top: -7%; max-width: none; }
+  .principles { list-style: none; padding: 0; margin: 2.6rem 0 0; display: grid; gap: 0; }
+  .principles li { display: grid; grid-template-columns: 11rem 1fr; gap: 1.5rem; padding: 1.15rem 0; border-top: 1px solid rgba(19,21,26,0.14); }
+  .principles li:last-child { border-bottom: 1px solid rgba(19,21,26,0.14); }
+  .principles b { font-weight: 500; }
+  .principles span { color: var(--sc-ink-soft); line-height: 1.55; }
+
+  /* II. The builders */
+  .builders__strip { height: clamp(16rem, 42vw, 30rem); overflow: hidden; margin-bottom: clamp(3.5rem, 7vw, 6rem); }
+  .builders__strip .ph, .builders__strip picture, .builders__strip .photo { height: 100%; display: block; }
+  .builders__cap { position: absolute; }
+  .builders { display: grid; grid-template-columns: repeat(12, 1fr); column-gap: clamp(1rem, 2.4vw, 2.5rem); row-gap: 3rem; }
+  .builders__head { grid-column: 1 / span 9; }
+  .builders__body { grid-column: 1 / span 7; }
+  .builders__figs { grid-column: 9 / span 4; align-self: start; list-style: none; margin: 0; padding: 0; }
+  .builders__figs li { padding: 1.3rem 0 1.4rem; border-top: 1px solid rgba(19,21,26,0.16); }
+  .builders__figs li:last-child { border-bottom: 1px solid rgba(19,21,26,0.16); }
+  .fig__n { font-family: var(--sc-font-display); font-size: var(--sc-t-3xl); line-height: 1; display: block; font-variation-settings: "opsz" 72; font-variant-numeric: tabular-nums lining-nums; }
+  .fig__l { color: var(--sc-ink-soft); font-size: var(--sc-t-sm); margin-top: 0.5rem; display: block; }
+  .people { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: clamp(1.5rem, 4vw, 4rem); margin-top: 1.5rem; }
+  .person { border-top: 2px solid var(--sc-ink); padding-top: 1.4rem; }
+  .person h3 { font-family: var(--sc-font-display); font-size: var(--sc-t-xl); margin: 0; line-height: 1.15; }
+  .person__role { display: block; margin: 0.5rem 0 1rem; color: var(--sc-accent); }
+  .person p { margin: 0; color: var(--sc-ink-soft); line-height: 1.6; max-width: 46ch; }
+
+  /* III. Concept to production */
+  .dark { background: var(--navy); color: var(--navy-ink); --sc-ink: var(--navy-ink); --sc-ink-soft: var(--navy-soft); --sc-accent: var(--sky); }
+  .intertitle { min-height: 100svh; display: grid; align-content: center; }
+  .intertitle__num { font-family: var(--sc-font-display); font-style: italic; font-size: var(--sc-t-xl); color: var(--sky); }
+  .intertitle h2 { font-size: clamp(3rem, 1.2rem + 6vw, 6.6rem); max-width: 12ch; margin: 0.4rem 0 1.8rem; line-height: 0.98; }
+  .intertitle p { max-width: 44ch; color: var(--navy-soft); font-size: var(--sc-t-lg); line-height: 1.5; margin: 0; }
+
+  .bp { background: var(--navy); color: var(--navy-ink); }
+  .bp [data-sc-stage] {
+    height: 100svh; display: grid; grid-template-columns: minmax(0, 1fr) 21rem; gap: clamp(1rem, 3vw, 3rem);
+    align-items: center; padding: clamp(1.5rem, 4vh, 3rem) var(--sc-gutter) clamp(1.5rem, 4vh, 3rem) calc(var(--folio-w) + var(--sc-gutter));
+    background-image:
+      linear-gradient(rgba(141,184,255,0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(141,184,255,0.07) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+  .bp__sheet { position: relative; width: 100%; max-height: 88svh; aspect-ratio: 1200 / 760; justify-self: center; }
+  .bp__sheet svg { width: 100%; height: 100%; display: block; overflow: visible; }
+  .bp svg .ink    { fill: none; stroke: var(--navy-ink); stroke-width: 1.6; vector-effect: non-scaling-stroke; }
+  .bp svg .pencil { fill: none; stroke: var(--pencil); stroke-width: 1; stroke-dasharray: none; vector-effect: non-scaling-stroke; }
+  .bp svg .sec    { fill: none; stroke: var(--sky); stroke-width: 1.4; vector-effect: non-scaling-stroke; }
+  .bp svg .dim    { fill: none; stroke: var(--navy-soft); stroke-width: 1; vector-effect: non-scaling-stroke; }
+  .bp svg .fillbox{ fill: rgba(141,184,255,0.06); stroke: none; }
+  .bp svg text { font-family: var(--sc-font-mono); fill: var(--navy-ink); font-size: 15px; letter-spacing: 0.04em; }
+  .bp svg text.sm  { font-size: 12px; fill: var(--navy-soft); }
+  .bp svg text.sec-t { fill: var(--sky); font-size: 12px; }
+  .bp svg text.pen { fill: var(--pencil); font-family: var(--sc-font-display); font-style: italic; font-size: 19px; letter-spacing: 0; }
+  .bp svg .lamp { fill: var(--sky); }
+  .bp svg .lamp-ring { fill: none; stroke: var(--sky); stroke-width: 1; vector-effect: non-scaling-stroke; }
+
+  .bp__block { border: 1px solid rgba(169,183,216,0.45); font-family: var(--sc-font-mono); font-size: 0.74rem; letter-spacing: 0.04em; align-self: center; }
+  .bp__block header { padding: 0.9rem 1rem; border-bottom: 1px solid rgba(169,183,216,0.45); display: flex; justify-content: space-between; gap: 1rem; text-transform: uppercase; color: var(--navy-soft); }
+  .bp__block header b { color: var(--navy-ink); font-weight: 500; }
+  .bp__rows { list-style: none; margin: 0; padding: 0; }
+  .bp__rows li { display: grid; grid-template-columns: 2.2rem 1fr; gap: 0.2rem 0.6rem; padding: 0.85rem 1rem; border-bottom: 1px solid rgba(169,183,216,0.22); transition: opacity 260ms var(--sc-ease-out), background-color 260ms var(--sc-ease-out); }
+  .bp__rows li:last-child { border-bottom: 0; }
+  .bp__rows .rev { color: var(--sky); grid-row: span 2; font-size: 0.9rem; }
+  .bp__rows .rev-t { color: var(--navy-ink); text-transform: uppercase; }
+  .bp__rows p { margin: 0; color: var(--navy-soft); font-family: var(--sc-font-text); font-size: 0.86rem; letter-spacing: 0; line-height: 1.45; }
+  .bp__rows li.is-current { background: rgba(141,184,255,0.08); }
+  .bp__sign { padding: 0.9rem 1rem; border-top: 1px solid rgba(169,183,216,0.45); display: flex; justify-content: space-between; color: var(--navy-soft); text-transform: uppercase; }
+
+  .stamp {
+    position: absolute; right: 3%; bottom: -5%;
+    border: 3px double var(--sky); color: var(--sky);
+    padding: 0.7rem 1.1rem 0.6rem; rotate: -8deg;
+    font-family: var(--sc-font-mono); text-transform: uppercase; letter-spacing: 0.14em; font-size: clamp(0.7rem, 0.55rem + 0.5vw, 1rem);
+    line-height: 1.35; text-align: center;
+    background: rgba(14,31,69,0.82);
+  }
+  .stamp b { display: block; font-size: 1.5em; letter-spacing: 0.08em; font-weight: 500; }
+
+  /* live animation states: default CSS above is the finished drawing, so no-JS
+     and reduced motion both get the complete blueprint. */
+  .bp-live .bp__rows li { opacity: 0.28; }
+  .bp-live .bp__rows li.is-on { opacity: 1; }
+  .bp-live .stamp { opacity: 0; transform: scale(1.35); }
+  .bp-live .stamp.is-on { opacity: 1; transform: scale(1); transition: opacity 180ms var(--sc-ease-out), transform 260ms cubic-bezier(0.2, 1.4, 0.4, 1); }
+
+  /* IV. Our guarantee */
+  .own { display: grid; grid-template-columns: repeat(12, 1fr); column-gap: clamp(1rem, 2.4vw, 2.5rem); row-gap: 3rem; }
+  .own__head { grid-column: 1 / span 8; }
+  .own__body { grid-column: 1 / span 6; }
+  .own__fig { grid-column: 8 / span 5; grid-row: 2 / span 1; }
+  .own__frame { aspect-ratio: 5 / 6; overflow: hidden; }
+  .own__frame .ph, .own__frame .photo { height: 112%; margin-top: -6%; }
+  .ledger { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; column-gap: clamp(1.5rem, 4vw, 4rem); margin-top: 1rem; }
+  .ledger__row { display: grid; grid-template-columns: 1fr auto; gap: 0.4rem 1.5rem; padding: 1.4rem 0; border-top: 1px solid rgba(19,21,26,0.16); }
+  .ledger__row h3 { font-family: var(--sc-font-text); font-size: var(--sc-t-base); font-weight: 600; margin: 0; }
+  .ledger__row p { grid-column: 1; margin: 0; color: var(--sc-ink-soft); line-height: 1.55; font-size: var(--sc-t-sm); max-width: 44ch; }
+  .ledger__row .fig { grid-column: 2; grid-row: 1 / span 2; font-family: var(--sc-font-display); font-size: var(--sc-t-xl); line-height: 1; text-align: right; font-variant-numeric: tabular-nums lining-nums; }
+  .ledger__row .fig small { display: block; font-family: var(--sc-font-mono); font-size: 0.66rem; letter-spacing: 0.06em; color: var(--sc-ink-soft); text-transform: uppercase; margin-top: 0.35rem; }
+  .practice { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 0.5rem 2.2rem; padding-top: 1.6rem; color: var(--sc-ink-soft); }
+  .practice .mono { color: var(--sc-ink); }
+
+  /* V. In their words */
+  .words { background: var(--ink-ground); color: #EEF0F3; --sc-ink: #EEF0F3; --sc-ink-soft: #A3A9B5; --sc-accent: var(--sky); }
+  .words blockquote { margin: 0; }
+  .words__quote { font-family: var(--sc-font-display); font-size: clamp(2.2rem, 1rem + 4.2vw, 5.2rem); line-height: 1.04; letter-spacing: -0.02em; max-width: 17ch; margin: 0; text-wrap: balance; font-variation-settings: "opsz" 72; padding-block: 0.08em; }
+  .words__more { max-width: 52ch; color: var(--sc-ink-soft); font-size: var(--sc-t-lg); line-height: 1.55; margin: 2.4rem 0 0 auto; }
+  .words__cite { display: block; margin-top: 2.6rem; font-style: normal; }
+  .words__cite b { font-weight: 500; color: var(--sc-ink); display: block; font-size: var(--sc-t-lg); }
+  .words__cite span { color: var(--sc-ink-soft); }
+  .clients { margin-top: clamp(4rem, 8vw, 7rem); display: flex; flex-wrap: wrap; align-items: center; gap: 1.5rem clamp(2rem, 5vw, 4.5rem); padding-top: 1.6rem; border-top: 1px solid rgba(238,240,243,0.16); }
+  .clients .mono { color: var(--sc-ink-soft); }
+  .clients img { height: 30px; width: auto; filter: grayscale(1) brightness(0) invert(0.92); opacity: 0.85; }
+
+  /* Colophon */
+  .colophon { padding-block: clamp(5rem, 10vw, 9rem) 2.5rem; }
+  .colophon__mark { width: clamp(120px, 14vw, 180px); height: auto; display: block; }
+  .colophon__ask { font-family: var(--sc-font-display); font-size: var(--sc-t-2xl); line-height: 1.2; max-width: 26ch; margin: clamp(2.5rem, 5vw, 4rem) 0 clamp(4rem, 8vw, 7rem); text-wrap: balance; font-variation-settings: "opsz" 48; }
+  .offices { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem clamp(1rem, 3vw, 3rem); padding-top: 1.4rem; border-top: 1px solid rgba(19,21,26,0.16); }
+  .offices h3 { font-family: var(--sc-font-text); font-size: var(--sc-t-sm); font-weight: 600; margin: 0 0 0.4rem; }
+  .offices p { margin: 0; font-size: var(--sc-t-xs); line-height: 1.6; color: var(--sc-ink-soft); }
+  .offices .mono { color: var(--sc-accent); display: block; margin-bottom: 0.5rem; font-size: 0.64rem; }
+  .colophon__foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; margin-top: clamp(3rem, 6vw, 5rem); font-size: var(--sc-t-xs); color: var(--sc-ink-soft); }
+
+  /* ---------- phone ---------- */
+  @media (max-width: 860px) {
+    :root { --folio-w: 0px; }
+    .folio { inset: 0 0 auto 0; width: auto; height: 3rem; flex-direction: row; padding: 0 1.25rem; background: color-mix(in srgb, var(--folio-bg, var(--sc-canvas)) 88%, transparent); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+    body.on-dark .folio { --folio-bg: var(--navy); }
+    .folio__text { writing-mode: horizontal-tb; transform: none; }
+    .folio__num { margin: 0 0.8em 0 0; }
+    .folio__mark { width: 24px; }
+    .title h1 { font-size: var(--sc-t-2xl); font-size: clamp(2.5rem, 10.5vw, 3.4rem); }
+    .title__back { inset: 0 -60% 30% -10%; opacity: 0.4; }
+    .title__vellum { width: 15rem; right: -5rem; bottom: auto; top: 5rem; rotate: 6deg; opacity: 0.9; }
+    .title__logo { margin-bottom: 2rem; }
+    .first, .builders, .own { grid-template-columns: 1fr; }
+    .first > *, .builders > *, .own > * { grid-column: 1 !important; grid-row: auto !important; }
+    .principles li { grid-template-columns: 1fr; gap: 0.3rem; }
+    .people, .ledger { grid-template-columns: 1fr; }
+    .bp [data-sc-stage] { grid-template-columns: 1fr; grid-template-rows: 1fr auto; padding: 3.75rem 0 1rem; overflow: hidden; align-items: start; }
+    .bp__sheet { width: 240vw; max-height: none; justify-self: start; transform: translateX(calc(var(--bp-pan, 0) * -140vw + 1.25rem)); }
+    .bp__block { margin: 0 1.25rem; font-size: 0.68rem; }
+    .bp__rows li { display: none; }
+    .bp__rows li.is-current { display: grid; }
+    .bp__block:not(.bp-live *) .bp__rows li:last-child { display: grid; }
+    .offices { grid-template-columns: 1fr 1fr; }
+    .words__more { margin-left: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .title__vellum { rotate: -3deg; }
+  }
+</style>
+</head>
+<body>
+
+<div class="sc-grain" aria-hidden="true"></div>
+
+<!-- Folio. The page's only chrome: chapter number and title, updating as chapters pass. -->
+<aside class="folio" aria-label="Chapter">
+  <a href="#top" aria-label="O+Dojo, back to the title page"><img class="folio__mark" src="assets/OPlusDojo-favicon-32px.svg" alt=""></a>
+  <p class="folio__text" aria-live="polite"><span class="folio__num" data-folio-num>O+Dojo</span><span data-folio-title>Agentic AI consulting</span></p>
+</aside>
+
+<main id="top">
+
+  <!-- TITLE PAGE. Three planes: a faint pencil concept sketch behind, the
+       headline at 1x, and a vellum sheet in front that overtakes the corner. -->
+  <section class="title" data-sc-act="flow" data-folio="|Agentic AI consulting">
+    <div class="title__plane title__back" data-sc-parallax="1.6" aria-hidden="true">
+      <svg viewBox="0 0 1200 760" preserveAspectRatio="xMidYMid slice">
+        <g fill="none" stroke="#9AA3B5" stroke-width="1.1" stroke-linecap="round">
+          <path d="M82 138 L262 141 L259 212 L80 209 Z"/>
+          <path d="M81 248 L263 251 L260 321 L79 318 Z"/>
+          <path d="M83 359 L261 362 L262 431 L80 428 Z"/>
+          <path d="M418 118 L762 122 L759 452 L421 449 Z"/>
+          <path d="M452 190 L731 193 L729 251 L450 248 Z"/>
+          <path d="M449 270 L732 272 L730 331 L451 329 Z"/>
+          <path d="M451 349 L729 352 L731 410 L449 408 Z"/>
+          <path d="M878 139 L1102 142 L1099 222 L880 219 Z"/>
+          <path d="M881 269 L1099 271 L1101 352 L879 349 Z"/>
+          <path d="M879 389 L1101 392 L1098 471 L881 468 Z"/>
+          <path d="M262 176 C 320 170, 360 182, 420 176"/>
+          <path d="M262 286 C 320 292, 360 280, 420 286"/>
+          <path d="M262 396 C 320 390, 360 402, 420 396"/>
+          <path d="M760 180 C 810 176, 840 186, 880 180"/>
+          <path d="M760 310 C 810 314, 840 306, 880 310"/>
+          <path d="M760 430 C 810 426, 840 434, 880 430"/>
+          <path d="M392 96 L1122 99 L1119 503 L389 500 Z" stroke-dasharray="6 7"/>
+        </g>
+        <g font-family="Newsreader, serif" font-style="italic" font-size="20" fill="#8E97A9">
+          <text x="96" y="182">their CRM?</text>
+          <text x="470" y="160">agents own the busywork</text>
+          <text x="900" y="186">model gateway</text>
+          <text x="420" y="545">needs to be secure. who is on call?</text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="title__plane title__vellum" data-sc-parallax="-1.1" aria-hidden="true">
+      <span class="mono">Sheet 01 &nbsp;·&nbsp; Rev A</span>
+      <span class="mono">Status: concept</span>
+      <svg viewBox="0 0 300 220">
+        <g fill="none" stroke="#2563EB" stroke-width="1.2">
+          <rect x="20" y="30" width="110" height="60"/>
+          <rect x="170" y="30" width="110" height="60"/>
+          <rect x="95" y="140" width="110" height="60"/>
+          <path d="M130 60 H170 M75 90 V120 H150 V140 M225 90 V120 H150"/>
+        </g>
+        <g stroke="#4A505C" stroke-width="1" fill="none">
+          <path d="M20 14 H280 M20 10 V18 M280 10 V18"/>
+        </g>
+        <text x="150" y="9" text-anchor="middle" font-family="Geist Mono, monospace" font-size="9" fill="#4A505C">PRODUCTION SCOPE</text>
+      </svg>
+    </div>
+
+    <div class="wrap">
+      <div class="title__copy" data-sc-in data-sc-stagger="70">
+        <img class="title__logo" src="assets/OPlusDojo-logo.final.svg" width="557" height="300" alt="O+Dojo">
+        <h1 class="sc-display">Complex AI systems, <em>owned</em> until they work.</h1>
+        <p class="title__dek">Former AWS engineers in Toronto and the U.S., building agentic AI that reaches production and stays there.</p>
+        <p class="title__byline"><a class="book" href="mailto:hello@oplusdojo.com?subject=Book%20a%20call">Book a call</a><span class="mono">Agentic AI · Cloud · DevSecOps</span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- I. YOU FIRST -->
+  <section class="chapter" id="you-first" data-sc-act="flow" data-folio="I|You first">
+    <div class="wrap first">
+      <div class="first__head" data-sc-in>
+        <h2 class="sc-display">We start with your business, <em>not</em> our stack.</h2>
+      </div>
+      <div class="first__body prose" data-sc-in data-sc-stagger="60">
+        <p class="lede">Before we draw a single box, we learn what has to be true for your company a year from now.</p>
+        <p>Most AI projects fail in the space between a promising demo and a system people rely on every day. We close that space by designing every solution from scratch around your goals, your data and your constraints, never a template we sell to everyone.</p>
+        <ul class="principles">
+          <li><b>Bespoke strategy</b><span>Every solution is designed from first principles to fit your business goals and challenges.</span></li>
+          <li><b>Deep partnership</b><span>Long-term relationships, with ongoing support and strategic guidance as your systems mature with your business.</span></li>
+          <li><b>You stay in control</b><span>We work alongside your teams and transfer knowledge as we go, so you are empowered, not dependent.</span></li>
+        </ul>
+      </div>
+      <figure class="first__fig">
+        <div class="first__frame"><img class="photo" data-sc-parallax="0.9" src="assets/first.jpg" width="1400" height="934" style="object-position: 38% 50%" alt="Hands sketching a product wireframe on a whiteboard" decoding="async"></div>
+        <figcaption>Every engagement starts on a whiteboard, with your goals</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- II. THE BUILDERS -->
+  <section class="chapter chapter--surface" id="builders" data-sc-act="flow" data-folio="II|The builders">
+    <figure class="builders__strip" data-sc-reveal="up" data-sc-reveal-at="0.02 0.3">
+      <picture><source media="(max-width: 860px)" srcset="assets/city-m.jpg"><img class="photo" src="assets/city.jpg" width="2400" height="1604" style="object-position: 50% 62%" alt="The Toronto skyline and CN Tower across Lake Ontario at golden hour" decoding="async"></picture>
+    </figure>
+    <div class="wrap builders">
+      <div class="builders__head" data-sc-in>
+        <h2 class="sc-display">Built by people who built it <em>at AWS.</em></h2>
+      </div>
+      <div class="builders__body prose" data-sc-in data-sc-stagger="60">
+        <p class="lede">O+Dojo is led from North America, by engineers who spent years building, scaling and securing enterprise systems at Amazon Web Services.</p>
+        <p>Our leadership and core engineering team are based in the United States and Canada. They have shaped developer tools relied on by millions of people, and they bring that same standard to every system we deliver, wherever our clients are.</p>
+        <p>You work directly with the people who design your system. No hand-off to a team you never met.</p>
+      </div>
+      <ul class="builders__figs" data-sc-in data-sc-stagger="80" aria-label="O+Dojo in figures">
+        <li><span class="fig__n"><span data-sc-count="0 10">10</span>+</span><span class="fig__l">Years building enterprise systems</span></li>
+        <li><span class="fig__n"><span data-sc-count="0 1">1</span>M+</span><span class="fig__l">Users served by tools our leaders built</span></li>
+        <li><span class="fig__n"><span data-sc-count="0 10">10</span>+</span><span class="fig__l">AI projects delivered</span></li>
+      </ul>
+      <div class="people" data-sc-in data-sc-stagger="80">
+        <article class="person">
+          <h3>Faik Faisal</h3>
+          <span class="person__role mono">Founder &amp; CEO · Toronto</span>
+          <p>Former Amazon, Slack and BlackBerry. Led development of Amazon Q Developer at AWS. Enterprise AI infrastructure expertise.</p>
+        </article>
+        <article class="person">
+          <!-- TODO(user): confirm CTO name, add city and 2-4 career highlights. -->
+          <h3>Shafaaf Hossain</h3>
+          <span class="person__role mono">Chief Technology Officer</span>
+          <p>Leads architecture and delivery across O+Dojo's agentic AI and cloud engagements.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- III. CONCEPT TO PRODUCTION: intertitle (authored silence before the peak) -->
+  <section class="dark intertitle" data-sc-act="flow" data-folio="III|Concept to production" data-dark>
+    <div class="wrap" data-sc-in data-sc-stagger="90">
+      <span class="intertitle__num">Chapter three</span>
+      <h2 class="sc-display">Concept to production.</h2>
+      <p>Every system we deliver passes through the same four revisions before it carries real work. This is one of them.</p>
+    </div>
+  </section>
+
+  <!-- III. THE PEAK: the blueprint drafts itself, then gets signed off. -->
+  <section class="bp" id="blueprint" data-sc-act="pin" data-sc-span="5" data-folio="III|Concept to production" data-dark>
+    <div data-sc-stage>
+      <div class="bp__sheet">
+        <svg viewBox="0 0 1200 760" role="img" aria-labelledby="bp-title">
+          <title id="bp-title">Architecture drawing of an agentic AI system: client systems feed an agent orchestrator with intake, reasoning and action agents, connected to a model gateway, vector store and data lake, all inside a secured private network, with observability and 24/7 on-call underneath.</title>
+
+          <!-- Rev A: concept, in pencil -->
+          <g data-ph="a">
+            <path class="pencil" pathLength="1" d="M82 138 L262 141 L259 212 L80 209 Z"/>
+            <path class="pencil" pathLength="1" d="M81 248 L263 251 L260 321 L79 318 Z"/>
+            <path class="pencil" pathLength="1" d="M83 359 L261 362 L262 431 L80 428 Z"/>
+            <path class="pencil" pathLength="1" d="M418 118 L762 122 L759 452 L421 449 Z"/>
+            <path class="pencil" pathLength="1" d="M878 139 L1102 142 L1099 222 L880 219 Z"/>
+            <path class="pencil" pathLength="1" d="M881 269 L1099 271 L1101 352 L879 349 Z"/>
+            <path class="pencil" pathLength="1" d="M879 389 L1101 392 L1098 471 L881 468 Z"/>
+            <path class="pencil" pathLength="1" d="M262 176 C 320 170, 360 182, 420 176"/>
+            <path class="pencil" pathLength="1" d="M262 286 C 320 292, 360 280, 420 286"/>
+            <path class="pencil" pathLength="1" d="M262 396 C 320 390, 360 402, 420 396"/>
+            <path class="pencil" pathLength="1" d="M760 180 C 810 176, 840 186, 880 180"/>
+            <path class="pencil" pathLength="1" d="M760 310 C 810 314, 840 306, 880 310"/>
+            <path class="pencil" pathLength="1" d="M760 430 C 810 426, 840 434, 880 430"/>
+            <text class="pen" x="470" y="104">agents take the repetitive work</text>
+            <text class="pen" x="88" y="122">what they run today</text>
+            <text class="pen" x="884" y="122">models + data</text>
+          </g>
+
+          <!-- Rev B: architecture, inked -->
+          <g data-ph="b">
+            <rect class="fillbox" x="80" y="140" width="180" height="70"/>
+            <rect class="fillbox" x="80" y="250" width="180" height="70"/>
+            <rect class="fillbox" x="80" y="360" width="180" height="70"/>
+            <rect class="ink" pathLength="1" x="80" y="140" width="180" height="70"/>
+            <rect class="ink" pathLength="1" x="80" y="250" width="180" height="70"/>
+            <rect class="ink" pathLength="1" x="80" y="360" width="180" height="70"/>
+            <rect class="ink" pathLength="1" x="420" y="120" width="340" height="330"/>
+            <rect class="ink" pathLength="1" x="450" y="190" width="280" height="60"/>
+            <rect class="ink" pathLength="1" x="450" y="270" width="280" height="60"/>
+            <rect class="ink" pathLength="1" x="450" y="350" width="280" height="60"/>
+            <rect class="ink" pathLength="1" x="880" y="140" width="220" height="80"/>
+            <rect class="ink" pathLength="1" x="880" y="270" width="220" height="80"/>
+            <rect class="ink" pathLength="1" x="880" y="390" width="220" height="80"/>
+            <path class="ink" pathLength="1" d="M260 175 H420"/>
+            <path class="ink" pathLength="1" d="M260 285 H420"/>
+            <path class="ink" pathLength="1" d="M260 395 H420"/>
+            <path class="ink" pathLength="1" d="M760 180 H880"/>
+            <path class="ink" pathLength="1" d="M760 310 H880"/>
+            <path class="ink" pathLength="1" d="M760 430 H880"/>
+            <path class="ink" pathLength="1" d="M590 250 V270 M590 330 V350"/>
+            <text x="98" y="181">CRM</text>
+            <text x="98" y="291">ERP</text>
+            <text x="98" y="401">Documents</text>
+            <text class="sm" x="98" y="198">your systems</text>
+            <text x="438" y="152">AGENT ORCHESTRATOR</text>
+            <text x="468" y="226">Intake agent</text>
+            <text x="468" y="306">Reasoning agent</text>
+            <text x="468" y="386">Action agent</text>
+            <text x="898" y="177">Model gateway</text>
+            <text class="sm" x="898" y="198">Amazon Bedrock</text>
+            <text x="898" y="307">Vector store</text>
+            <text class="sm" x="898" y="328">retrieval</text>
+            <text x="898" y="427">Data lake</text>
+            <text class="sm" x="898" y="448">Amazon S3</text>
+          </g>
+
+          <!-- Rev C: hardened. Security perimeter, policy gates, dimensions -->
+          <g data-ph="c">
+            <rect class="sec" pathLength="1" x="390" y="96" width="740" height="404" stroke-dasharray="0.012 0.008"/>
+            <rect class="sec" pathLength="1" x="383" y="166" width="14" height="18"/>
+            <rect class="sec" pathLength="1" x="383" y="276" width="14" height="18"/>
+            <rect class="sec" pathLength="1" x="383" y="386" width="14" height="18"/>
+            <path class="dim" pathLength="1" d="M390 64 H1130 M390 56 V72 M1130 56 V72"/>
+            <path class="dim" pathLength="1" d="M1158 96 V500 M1150 96 H1166 M1150 500 H1166"/>
+            <path class="dim" pathLength="1" d="M276 230 H322 L397 184"/>
+            <text class="sec-t" x="660" y="56">PRIVATE NETWORK · VPC</text>
+            <text class="sec-t" x="1174" y="300" transform="rotate(90 1174 300)" text-anchor="middle">ENCRYPTED AT REST · KMS</text>
+            <text class="sec-t" x="272" y="224">POLICY GATE · IAM</text>
+            <text class="sec-t" x="408" y="490">THREAT MODELLED · COMPLIANCE REVIEWED</text>
+          </g>
+
+          <!-- Rev D: production. Observability lane, taps, lamps -->
+          <g data-ph="d">
+            <rect class="ink" pathLength="1" x="80" y="580" width="1050" height="64"/>
+            <path class="dim" pathLength="1" d="M170 430 V580 M590 450 V580 M990 470 V580" stroke-dasharray="0.02 0.015"/>
+            <text x="98" y="618">OBSERVABILITY</text>
+            <text class="sm" x="290" y="618">metrics · traces · alerts</text>
+            <text class="sm" x="760" y="618">24/7 on-call · 99.9% uptime target</text>
+            <circle class="lamp-ring" cx="244" cy="156" r="7"/><circle class="lamp" cx="244" cy="156" r="3.5"/>
+            <circle class="lamp-ring" cx="744" cy="136" r="7"/><circle class="lamp" cx="744" cy="136" r="3.5"/>
+            <circle class="lamp-ring" cx="1084" cy="156" r="7"/><circle class="lamp" cx="1084" cy="156" r="3.5"/>
+            <circle class="lamp-ring" cx="1084" cy="286" r="7"/><circle class="lamp" cx="1084" cy="286" r="3.5"/>
+            <circle class="lamp-ring" cx="1084" cy="406" r="7"/><circle class="lamp" cx="1084" cy="406" r="3.5"/>
+            <text class="sec-t" x="80" y="690">ALL SYSTEMS NOMINAL</text>
+          </g>
+        </svg>
+
+        <div class="stamp" aria-hidden="true"><b>Approved</b>for production</div>
+      </div>
+
+      <aside class="bp__block" aria-label="Revision history">
+        <header><b>O+Dojo</b><span>Dwg 001 · Agentic system</span></header>
+        <ol class="bp__rows">
+          <li data-rev="a"><span class="rev">A</span><span class="rev-t">Concept</span><p>We map your process and the decisions an agent should own.</p></li>
+          <li data-rev="b"><span class="rev">B</span><span class="rev-t">Architecture</span><p>Agents, models and data paths, designed inside your cloud account.</p></li>
+          <li data-rev="c"><span class="rev">C</span><span class="rev-t">Hardened</span><p>Threat modelling, access control and compliance before anything ships.</p></li>
+          <li data-rev="d"><span class="rev">D</span><span class="rev-t">Production</span><p>Monitored, supported around the clock, and owned by us.</p></li>
+        </ol>
+        <!-- TODO(user): replace with a named engineering lead once confirmed. -->
+        <div class="bp__sign"><span>Signed off</span><span>O+Dojo Engineering</span></div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- IV. OUR GUARANTEE -->
+  <section class="chapter" id="ownership" data-sc-act="flow" data-folio="IV|Ownership">
+    <div class="wrap own">
+      <div class="own__head" data-sc-in>
+        <h2 class="sc-display">One team owns it, from the first call <em>to production.</em></h2>
+      </div>
+      <div class="own__body prose" data-sc-in data-sc-stagger="60">
+        <p class="lede">We do not hand you a prototype and walk away. The engineers who design your system are the ones who ship it, secure it and keep it running.</p>
+        <p>That means security from day one, not as an afterthought. It means every system is measured against business outcomes, not technical vanity. And it means support that is there at 3 a.m. when your business needs it.</p>
+        <p>Ready to see what that looks like for you? <a class="book" href="mailto:hello@oplusdojo.com?subject=Book%20a%20call">Book a call</a>.</p>
+      </div>
+      <figure class="own__fig">
+        <div class="own__frame"><img class="photo" src="assets/ops.jpg" width="1400" height="1750" data-sc-parallax="1" alt="Rows of white server cabinets in a bright, modern data center" decoding="async"></div>
+        <figcaption>Production is where the work is judged</figcaption>
+      </figure>
+
+      <div class="ledger" data-sc-in data-sc-stagger="50">
+        <div class="ledger__row"><h3>Enterprise-grade expertise</h3><p>Complex, global-scale projects delivered at AWS and beyond, built for lasting impact.</p><span class="fig">10+<small>Years</small></span></div>
+        <div class="ledger__row"><h3>Security by design</h3><p>Hands-on DevSecOps and threat modelling make every system secure, compliant and resilient.</p><span class="fig">99.9%<small>Uptime</small></span></div>
+        <div class="ledger__row"><h3>AI and cloud mastery</h3><p>Secure, scalable AI agents and LLM solutions, built within AWS architecture.</p><span class="fig">10+<small>AI projects</small></span></div>
+        <div class="ledger__row"><h3>Business-centric</h3><p>Every solution is aligned to measurable outcomes: ROI, growth and competitive advantage.</p><span class="fig">3x<small>Avg ROI</small></span></div>
+        <div class="ledger__row"><h3>Proven builders</h3><p>Our leaders shaped developer tools relied on by millions, with the precision that demands.</p><span class="fig">1M+<small>Users served</small></span></div>
+        <div class="ledger__row"><h3>Partners, not vendors</h3><p>We embed with your teams and transfer knowledge, and clients stay with us.</p><span class="fig">100%<small>Client retention</small></span></div>
+        <p class="practice"><span class="mono">Practice</span><span>AI development</span><span>Cloud excellence</span><span>Security and compliance</span><span>DevOps and automation</span><span>Secure architecture and operations</span><span>24/7 dedicated support</span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- V. IN THEIR WORDS -->
+  <section class="chapter words" id="words" data-sc-act="flow" data-folio="V|In their words" data-dark>
+    <div class="wrap">
+      <figure>
+        <blockquote>
+          <div data-sc-reveal="up" data-sc-reveal-at="0.12 0.42">
+            <p class="words__quote">“OPlus Dojo has truly been a catalyst in turning our momentum into measurable success.”</p>
+          </div>
+          <p class="words__more" data-sc-in>“Their commitment, expertise, and execution have been exceptional. Thanks to their work, our customers are thrilled, and we’re on the verge of converting our pilot into a multi-year partnership.”</p>
+        </blockquote>
+        <figcaption class="words__cite" data-sc-in><b>Melanie Chen</b><span>CTO and Cofounder, EloraHQ</span></figcaption>
+      </figure>
+      <div class="clients" data-sc-in data-sc-stagger="60">
+        <span class="mono">Clients include</span>
+        <img src="assets/elora-logo.png" alt="EloraHQ">
+        <img src="assets/tenera-logo.png" alt="Tenera">
+        <img src="assets/botfood-logo.png" alt="Bot Food">
+      </div>
+    </div>
+  </section>
+
+  <!-- COLOPHON. The close: quiet, small type, the ask as a sentence. -->
+  <footer class="colophon" data-folio="|Colophon">
+    <div class="wrap" data-sc-in data-sc-stagger="70">
+      <img class="colophon__mark" src="assets/OPlusDojo-logo.final.svg" width="557" height="300" alt="O+Dojo">
+      <p class="colophon__ask">Tell us what has to work. <a class="book" href="mailto:hello@oplusdojo.com?subject=Book%20a%20call">Book a call</a> with our engineering leads, and we will tell you honestly how we would build it.</p>
+      <div class="offices">
+        <div><span class="mono">North America</span><h3>New York</h3><p>251 E 32nd St<br>New York, NY 10016</p></div>
+        <div><span class="mono">North America</span><h3>Toronto</h3><p>81 Lampton Crescent<br>Markham, ON L6E 1J4</p></div>
+        <div><span class="mono">Middle East</span><h3>Dubai</h3><p>City Tower 2, Sheikh Zayed Road<br>PO Box 211120</p></div>
+        <div><span class="mono">South Asia</span><h3>Dhaka</h3><p>House 492/4, Road 9 (west)<br>Baridhara DOHS, Dhaka 1206</p></div>
+      </div>
+      <div class="colophon__foot">
+        <span>Careers: <a href="mailto:careers@oplusdojo.com">careers@oplusdojo.com</a></span>
+        <span>© 2026 OPlus Dojo</span>
+      </div>
+    </div>
+  </footer>
+
+</main>
+
+<script src="scrollcraft.js"></script>
+<script>ScrollCraft.mount(document.body);</script>
+<script>
+/* Folio: chapter number and title follow the reader. */
+(function () {
+  var num = document.querySelector('[data-folio-num]');
+  var title = document.querySelector('[data-folio-title]');
+  var sections = [].slice.call(document.querySelectorAll('[data-folio]'));
+  var current = null;
+  function update() {
+    var probe = window.innerHeight * 0.4, pick = sections[0];
+    for (var i = 0; i < sections.length; i++) {
+      if (sections[i].getBoundingClientRect().top <= probe) pick = sections[i];
+    }
+    if (pick === current) return;
+    current = pick;
+    var parts = pick.getAttribute('data-folio').split('|');
+    num.textContent = parts[0] || 'O+Dojo';
+    title.textContent = parts[1];
+    document.body.classList.toggle('on-dark', pick.hasAttribute('data-dark'));
+  }
+  window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update);
+  update();
+})();
+
+/* Signature move: the blueprint drafts itself from the act's --sc-p, the
+   revision ledger accumulates, and the drawing is stamped for production. */
+(function () {
+  var act = document.getElementById('blueprint');
+  if (!act) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return; // finished drawing stays
+
+  var phases = { a: [0.03, 0.24], b: [0.22, 0.48], c: [0.47, 0.68], d: [0.67, 0.86] };
+  var STAMP_AT = 0.9;
+  var items = [];
+  Object.keys(phases).forEach(function (k) {
+    var g = act.querySelector('[data-ph="' + k + '"]');
+    var els = [].slice.call(g.children);
+    var strokes = els.filter(function (e) { return e.hasAttribute('pathLength'); });
+    var others = els.filter(function (e) { return !e.hasAttribute('pathLength'); });
+    var s = phases[k][0], len = phases[k][1] - phases[k][0];
+    strokes.forEach(function (e, i) {
+      var from = s + (i / strokes.length) * len * 0.55;
+      items.push({ el: e, kind: 'stroke', from: from, to: from + len * 0.45, dash: e.getAttribute('stroke-dasharray') });
+    });
+    others.forEach(function (e, i) {
+      var from = s + len * (0.35 + 0.4 * (i / Math.max(others.length, 1)));
+      items.push({ el: e, kind: 'fade', from: from, to: from + len * 0.25 });
+    });
+  });
+  var pencil = act.querySelector('[data-ph="a"]');
+  var penText = [].slice.call(pencil.querySelectorAll('text'));
+  var rows = [].slice.call(act.querySelectorAll('.bp__rows li'));
+  var stamp = act.querySelector('.stamp');
+  var sheet = act.querySelector('.bp__sheet');
+  act.classList.add('bp-live');
+
+  function clamp(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
+  var last = -1;
+  function frame() {
+    var p = parseFloat(act.style.getPropertyValue('--sc-p')) || 0;
+    if (Math.abs(p - last) > 0.0005) {
+      last = p;
+      for (var i = 0; i < items.length; i++) {
+        var it = items[i], t = clamp((p - it.from) / (it.to - it.from));
+        if (it.kind === 'stroke') {
+          if (it.dash) {
+            // dashed lines reveal through opacity so their dash pattern survives
+            it.el.style.opacity = t;
+          } else {
+            it.el.style.strokeDasharray = '1 1';
+            it.el.style.strokeDashoffset = (1 - t).toFixed(4);
+          }
+        } else {
+          it.el.style.opacity = t;
+        }
+      }
+      // the concept sketch recedes once the architecture is inked
+      var fadeP = clamp((p - 0.4) / 0.12);
+      pencil.style.opacity = (1 - 0.72 * fadeP).toFixed(3);
+      for (var q = 0; q < penText.length; q++) penText[q].style.opacity = (1 - fadeP).toFixed(3);
+      var phaseKeys = ['a', 'b', 'c', 'd'], cur = -1;
+      phaseKeys.forEach(function (k, idx) { if (p >= phases[k][0]) cur = idx; });
+      rows.forEach(function (r, idx) {
+        r.classList.toggle('is-on', idx <= cur);
+        r.classList.toggle('is-current', idx === cur);
+      });
+      stamp.classList.toggle('is-on', p >= STAMP_AT);
+      // phones: the sheet is wider than the screen, so the camera follows the pen
+      sheet.style.setProperty('--bp-pan', clamp((p - 0.05) / 0.8).toFixed(4));
+    }
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

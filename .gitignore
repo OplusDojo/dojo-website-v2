@@ -1,0 +1,24 @@
+.DS_Store
+node_modules/
+builds/oplusdojo/.agentation/
+
+# lab/ holds screenshots, test recordings and downloaded references; keep only
+# the page generators and the archived earlier versions of the landing page
+builds/oplusdojo/lab/*
+!builds/oplusdojo/lab/gen/
+!builds/oplusdojo/lab/v1-index.html
+!builds/oplusdojo/lab/v2-index.html
+!builds/oplusdojo/lab/v2-site.css
+!builds/oplusdojo/lab/v3/
+builds/oplusdojo/lab/v3/d/
+builds/oplusdojo/lab/v3/m/
+
+# Installed agent skills are restored from skills-lock.json, not committed
+.claude/skills/
+.agents/skills/
+
+# Local tool state and deployment credentials
+.vercel/
+.env
+.env.*
+builds/oplusdojo/.taste-skill/

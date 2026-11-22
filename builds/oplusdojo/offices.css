@@ -1,0 +1,66 @@
+/* A quiet, scroll-drawn office network. SVG remains complete without scripts. */
+.offices {
+  --navy: #000;
+  background: var(--navy);
+  color: var(--navy-ink);
+  position: relative;
+  --sc-ink: var(--navy-ink);
+  --sc-ink-soft: var(--navy-soft);
+}
+.offices__stage { overflow: hidden; }
+.offices__layout {
+  display: grid;
+  grid-template-columns: minmax(280px, .85fr) minmax(0, 1.8fr);
+  grid-template-rows: 1fr;
+  align-items: center;
+  column-gap: 1.5rem;
+  padding-block: clamp(2rem, 4vw, 3.5rem);
+  min-height: 0;
+}
+.offices__copy { grid-column: 1; grid-row: 1; position: relative; z-index: 1; transform: translateY(-24px); }
+.offices__copy h2 { font-size: clamp(2.4rem, 3.7vw, 4rem); line-height: 1.06; }
+.offices__copy h2 span { color: var(--green); }
+.offices__copy p { margin: 1.6rem 0 0; color: #B5C8BB; font-size: 1rem; line-height: 1.6; max-width: 29ch; }
+.offices__visual { grid-column: 2; grid-row: 1; min-width: 0; margin-inline: -3rem; }
+.offices__map { display: block; width: 100%; height: auto; overflow: visible; transform: translateY(24px); }
+.offices__geography { transform-origin: 50% 50%; }
+.offices__land, .offices__region { fill: none; stroke-linecap: round; stroke-width: 1.8; }
+.offices__land { stroke: #41634D; }
+.offices__region { stroke: var(--green); opacity: .68; }
+.offices__route-base { fill: none; stroke: #476C50; stroke-width: .7; opacity: .6; }
+.offices__route { fill: none; stroke: var(--green); stroke-width: 1.4; }
+.offices__ring { fill: var(--navy); stroke: var(--green); stroke-width: 1; }
+.offices__point { fill: var(--green); }
+.offices__leader { fill: none; stroke: #8DAF98; stroke-width: .85; }
+.offices__pin text { fill: #FFF; font: 500 15px var(--sc-font-text); paint-order: stroke; stroke: var(--navy); stroke-width: 5px; stroke-linejoin: round; }
+.foot--network .foot__grid .chip { font-size: clamp(.55rem, .68vw, .72rem); letter-spacing: .035em; gap: .3em; white-space: nowrap; }
+@media (min-width: 861px) and (min-height: 700px) {
+  .foot--network { display: flex; flex-direction: column; height: calc(100svh - var(--nav-h)); }
+  .foot--network .offices { flex: 1; min-height: 0; }
+  .foot--network .offices__stage, .foot--network .offices__layout { height: 100%; }
+  .foot--network .offices__visual { height: 100%; min-height: 0; }
+  .foot--network .offices__map { height: 100%; }
+  .foot--network .foot__grid, .foot--network .foot__base { flex-shrink: 0; width: 100%; }
+}
+@media (max-width: 1000px) {
+  .offices__layout { grid-template-columns: 1fr 1.5fr; column-gap: .5rem; }
+  .offices__copy h2 { font-size: 2.6rem; }
+}
+@media (max-width: 860px) {
+  .foot--network .foot__grid .chip { font-size: .6rem; }
+  .offices__layout { grid-template-columns: 1fr; grid-template-rows: auto auto; padding-block: 3.5rem 2.5rem; min-height: 0; }
+  .offices__copy h2 { font-size: clamp(2.4rem, 6vw, 3.6rem); max-width: 15ch; }
+  .offices__copy p { max-width: 34ch; margin-top: 1.2rem; }
+  .offices__copy { transform: translateY(-12px); }
+  .offices__map { transform: translateY(12px); }
+  .offices__visual { grid-column: 1; grid-row: 2; margin: 2.5rem 0 0; }
+  .offices__pin text { font-size: 24px; stroke-width: 7px; }
+  .offices__land, .offices__region { stroke-width: 2.3; }
+  .offices__route { stroke-width: 2; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .offices__geography { transform: none !important; }
+  .offices__route { stroke-dashoffset: 0 !important; }
+  .offices__region { opacity: .68 !important; }
+  .offices__pin { opacity: 1 !important; }
+}
